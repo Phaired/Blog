@@ -54,10 +54,10 @@ jobs:
 
 The syntax of GitHub Actions is relatively straightforward. This action triggers on a push to the **main** branch. The job, named `deploy`, runs on Ubuntu. Each step includes a **name**, **uses** or **run**, and sometimes **with**:
 
--   **name**: simply the identifier for the step in the logs
--   **uses**: invokes a pre-existing action
--   **run**: executes a command in the CLI
--   **with**: specifies parameters for the step
+- **name**: simply the identifier for the step in the logs
+- **uses**: invokes a pre-existing action
+- **run**: executes a command in the CLI
+- **with**: specifies parameters for the step
 
 For instance, the "Checkout code" step checks out the repository on the runner. The "Install Node.js" step installs Node.js, specifying version 20.
 

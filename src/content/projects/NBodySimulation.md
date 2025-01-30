@@ -37,9 +37,9 @@ The use of MPI allows exploiting this parallelization by distributing calculatio
 
 The problem is decomposed into several sub-problems:
 
--   Initialization of bodies
--   Calculation of forces/accelerations exerted on each body
--   Updating positions
+- Initialization of bodies
+- Calculation of forces/accelerations exerted on each body
+- Updating positions
 
 ### Body Initialization Code
 
@@ -180,10 +180,10 @@ Body Position Update
 
 The simulation starts with the initialization of the MPI environment, which is essential for parallel operation:
 
--   `MPI_Init(&argc, &argv);` initializes MPI and allows each process to use MPI functions.
--   `MPI_Comm_rank` and `MPI_Comm_size` determine the rank and total number of processes in the communicator.
--   `MPI_Get_processor_name` retrieves the host name for each process.
--   `MPI_Comm_set_errhandler` sets the error handler for the communicator.
+- `MPI_Init(&argc, &argv);` initializes MPI and allows each process to use MPI functions.
+- `MPI_Comm_rank` and `MPI_Comm_size` determine the rank and total number of processes in the communicator.
+- `MPI_Get_processor_name` retrieves the host name for each process.
+- `MPI_Comm_set_errhandler` sets the error handler for the communicator.
 
 #### Simulation Setup
 
@@ -197,9 +197,9 @@ Bodies are initialized in a `bodies` vector, and then the initial data are broad
 
 The simulation is orchestrated within a `for` loop, where each iteration represents a step in the simulation. During these steps, specific MPI functions are used to ensure effective synchronization and communication between the different nodes. Here are the key MPI functions used in this loop:
 
--   `MPI_Bcast`: This function is used to broadcast body data from the main node (rank 0) to all other nodes. It ensures that each process starts each simulation step with the most recent data.
--   `MPI_Allgather`: After updating the positions and velocities of the bodies by each node, `MPI_Allgather` collects the updated data from all subsets of bodies processed by each node and distributes them to all nodes. This function is crucial to ensure that each node has a complete and updated set of data on all bodies for the next simulation step.
--   MPI Error Handling: Functions such as `MPI_Comm_set_errhandler` are used to define custom error handlers, allowing for better management of exceptions and error situations that may occur during parallel communication.
+- `MPI_Bcast`: This function is used to broadcast body data from the main node (rank 0) to all other nodes. It ensures that each process starts each simulation step with the most recent data.
+- `MPI_Allgather`: After updating the positions and velocities of the bodies by each node, `MPI_Allgather` collects the updated data from all subsets of bodies processed by each node and distributes them to all nodes. This function is crucial to ensure that each node has a complete and updated set of data on all bodies for the next simulation step.
+- MPI Error Handling: Functions such as `MPI_Comm_set_errhandler` are used to define custom error handlers, allowing for better management of exceptions and error situations that may occur during parallel communication.
 
 #### Output Data Management
 
