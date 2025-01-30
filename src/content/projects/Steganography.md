@@ -32,9 +32,9 @@ To ensure message security, it is encrypted with RSA. The encrypted message is c
 
 A Portable Bitmap Format (PPM) image is a simple, uncompressed image structure containing a header with 3 lines:
 
--   Image type indicating if the image is binary or ASCII; we use the binary type `P6`.
--   Image width and height.
--   Maximum value for each color (255 in this case).
+- Image type indicating if the image is binary or ASCII; we use the binary type `P6`.
+- Image width and height.
+- Maximum value for each color (255 in this case).
 
 Following the header, each pixel's RGB values are listed.
 
@@ -97,15 +97,15 @@ let insert_message file_path message =
 
 The `overwrite_last_bit` function modifies the last bit of a byte based on the provided bit ('0' or '1'). It uses a basic logical operation (AND or OR), executed in constant time.
 
--   **Time Complexity:** O(1), as it performs a comparison and a binary operation regardless of input size.
--   **Space Complexity:** O(1), as it uses a fixed amount of space with no additional space required based on input size.
+- **Time Complexity:** O(1), as it performs a comparison and a binary operation regardless of input size.
+- **Space Complexity:** O(1), as it uses a fixed amount of space with no additional space required based on input size.
 
 #### Complexity of the Byte Processing Loop
 
 The loop iterates over each byte of the image to insert the encoded message bits, with complexity primarily dependent on the number of bytes in the image.
 
--   **Time Complexity:** O(n), where _n_ is the total number of bytes in the image (width × height × 3). Each iteration calls `overwrite_last_bit`, which runs in constant time, making the total time linear with respect to _n_.
--   **Space Complexity:** O(1). The loop uses a constant amount of space for variables like byte index and bit index, independent of image size or message length.
+- **Time Complexity:** O(n), where _n_ is the total number of bytes in the image (width × height × 3). Each iteration calls `overwrite_last_bit`, which runs in constant time, making the total time linear with respect to _n_.
+- **Space Complexity:** O(1). The loop uses a constant amount of space for variables like byte index and bit index, independent of image size or message length.
 
 ## 4. Message Encryption with RSA
 
@@ -138,19 +138,19 @@ Key generation involves the following steps:
 
 ### 4.2 Keys
 
--   **Public Key:** Composed of $(n, e)$.
+- **Public Key:** Composed of $(n, e)$.
 
--   **Private Key:** Composed of $(n, d)$.
+- **Private Key:** Composed of $(n, d)$.
 
 ### 4.3 Encryption and Decryption
 
--   **Encryption:** To encrypt a message _m_ (where _m_ is an integer smaller than _n_), compute:
+- **Encryption:** To encrypt a message _m_ (where _m_ is an integer smaller than _n_), compute:
 
 $$ c = m^e \mod n $$
 
 where _c_ is the ciphertext.
 
--   **Decryption:** To decrypt _c_ using the private key:
+- **Decryption:** To decrypt _c_ using the private key:
 
 $$ m = c^d \mod n $$
 
@@ -192,24 +192,24 @@ Encryption and decryption processes involve converting the message into an integ
 
 ### 4.7 Utilities and Miscellaneous Operations
 
--   **Coprimality Test (`coprime`):** Checks if two numbers are coprime by computing their GCD.
--   **Serialization and File Writing:** Converts data structures into string format and writes them to files for later use.
+- **Coprimality Test (`coprime`):** Checks if two numbers are coprime by computing their GCD.
+- **Serialization and File Writing:** Converts data structures into string format and writes them to files for later use.
 
 ### 4.8 Complexity
 
 #### Key Generation
 
--   **Prime Generation (`prime_gen`):** Uses the Miller-Rabin primality test, a probabilistic algorithm. The time complexity is dominated by modular exponentiations, denoted as O(k · log³ n), where _k_ is the number of trials and _n_ is the number being tested.
--   **Private Key Generation (`private_key_gen`):** Involves calculating _n = p × q_ and ϕ = (p−1)(q−1), followed by determining the private exponent _d_ via modular inversion, with a complexity of O(log² n).
+- **Prime Generation (`prime_gen`):** Uses the Miller-Rabin primality test, a probabilistic algorithm. The time complexity is dominated by modular exponentiations, denoted as O(k · log³ n), where _k_ is the number of trials and _n_ is the number being tested.
+- **Private Key Generation (`private_key_gen`):** Involves calculating _n = p × q_ and ϕ = (p−1)(q−1), followed by determining the private exponent _d_ via modular inversion, with a complexity of O(log² n).
 
 #### Encryption and Decryption
 
--   **Encryption (`plaintext_encrypt`):** Utilizes modular exponentiation with a time complexity of O(log _e_), where _e_ is the public exponent, typically chosen to be small to optimize speed.
+- **Encryption (`plaintext_encrypt`):** Utilizes modular exponentiation with a time complexity of O(log _e_), where _e_ is the public exponent, typically chosen to be small to optimize speed.
 
 #### Miscellaneous Operations
 
--   **Coprimality Test (`coprime`):** Implements GCD calculation with logarithmic time complexity relative to the input sizes.
--   **Serialization and File Writing:** Involves I/O operations that may impact performance based on the file system used.
+- **Coprimality Test (`coprime`):** Implements GCD calculation with logarithmic time complexity relative to the input sizes.
+- **Serialization and File Writing:** Involves I/O operations that may impact performance based on the file system used.
 
 ## 5. Results
 
@@ -250,8 +250,8 @@ Although RSA was covered in the cryptography course, we encountered it just befo
 
 ## 7. References
 
--   [RSA-by-OCaml](https://github.com/MingLLuo/RSA-by-OCaml)
--   ChatGPT
+- [RSA-by-OCaml](https://github.com/MingLLuo/RSA-by-OCaml)
+- ChatGPT
 
 ---
 
