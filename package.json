@@ -10,17 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^3.1.9",
-    "@astrojs/rss": "^4.0.10",
+    "@astrojs/mdx": "^4.0.8",
+    "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
-    "astro": "^4.16.16",
+    "astro": "^5.3.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "word-count": "^0.2.2"
   },
   "devDependencies": {
-    "astro-compress": "^2.3.5",
-    "prettier": "^3.4.1",
+    "astro-compress": "^2.3.6",
+    "prettier": "^3.5.1",
     "prettier-plugin-astro": "^0.14.1"
   }
 }
