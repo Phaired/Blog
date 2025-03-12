@@ -5,7 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 type entry = "blog" | "projects";
 type Props = CollectionEntry<entry>["data"];
@@ -16,7 +16,7 @@ const { title, description, pubDate, updatedDate, heroImage, heroGif }: Props =
 
 <html lang="en">
     <head>
-        <ViewTransitions />
+        <ClientRouter />
         <BaseHead
             title={title}
             description={description}
