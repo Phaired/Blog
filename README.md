@@ -123,7 +123,3 @@ Add new projects as Markdown or MDX files in the `src/content/projects/` directo
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📄 License
-
-All rights reserved. This code is not open source.
