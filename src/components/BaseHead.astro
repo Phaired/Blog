@@ -1,6 +1,7 @@
 ---
-// We'll handle CSS loading differently to avoid render blocking
-// Import only what's needed for critical rendering
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import "../styles/global.css";
 
 interface Props {
     title: string;
@@ -11,38 +12,6 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = "/share-banner.webp" }: Props = Astro.props;
-
-// Extract critical CSS for inlining
-import fs from 'node:fs';
-import path from 'node:path';
-
-// Read the global CSS file
-const globalCssPath = path.resolve('./src/styles/global.css');
-const globalCss = fs.readFileSync(globalCssPath, 'utf-8');
-
-// Extract critical CSS (basic styling, variables, fonts, and core elements)
-const criticalCss = globalCss
-  .split('\n')
-  .filter(line => 
-    // Include CSS variables and basic styling
-    line.includes(':root') || 
-    line.includes('--') ||
-    line.includes('@font-face') ||
-    line.includes('body') ||
-    line.includes('main') ||
-    line.includes('h1,') ||
-    line.includes('h2,') ||
-    line.includes('h3,') ||
-    line.includes('h4,') ||
-    line.includes('h5,') ||
-    line.includes('h6,') ||
-    line.includes('a {') ||
-    line.includes('p {') ||
-    // Exclude KaTeX styling
-    !line.includes('KaTeX') &&
-    !line.includes('katex')
-  )
-  .join('\n');
 ---
 
 <!-- Global Metadata -->
@@ -51,13 +20,6 @@ const criticalCss = globalCss
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <meta name="generator" content={Astro.generator} />
-
-<!-- Inline critical CSS to avoid render blocking -->
-<style set:html={criticalCss}></style>
-
-<!-- Load full CSS asynchronously -->
-<link rel="preload" href="/styles/global.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/styles/global.css"></noscript>
 
 <!-- Font preloads -->
 <link
