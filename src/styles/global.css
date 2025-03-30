@@ -43,9 +43,12 @@ body {
 	color: rgb(var(--color-text));
 	font-size: 20px;
 	line-height: 1.7;
+	min-height: 100svh;
+	display: flex;
+	flex-direction: column;
 }
 main {
-	min-height: calc(100svh - 9svh - 10svh - 5em);
+	flex: 1;
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
