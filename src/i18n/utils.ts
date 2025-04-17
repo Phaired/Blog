@@ -21,7 +21,8 @@ export function useTranslations(lang?: UiType) {
         key: keyof (typeof ui)[typeof DEFAULT_LANG],
         ...args: any[]
     ) {
-        let translation = ui[lang ?? DEFAULT_LANG][key] || ui[DEFAULT_LANG][key];
+        let translation =
+            ui[lang ?? DEFAULT_LANG][key] || ui[DEFAULT_LANG][key];
         if (args.length > 0) {
             for (let i = 0; i < args.length; i++) {
                 translation = translation.replace(`{${i}}`, args[i]);
@@ -32,7 +33,10 @@ export function useTranslations(lang?: UiType) {
 }
 
 export function pathNameIsInLanguage(pathname: string, lang: UiType) {
-    return pathname.startsWith(`/${lang}`) || (lang === DEFAULT_LANG && !pathNameStartsWithLanguage(pathname));
+    return (
+        pathname.startsWith(`/${lang}`) ||
+        (lang === DEFAULT_LANG && !pathNameStartsWithLanguage(pathname))
+    );
 }
 
 function pathNameStartsWithLanguage(pathname: string) {
@@ -52,7 +56,7 @@ function pathNameStartsWithLanguage(pathname: string) {
 
 export function getLocalizedPathname(pathname: string, lang: UiType) {
     if (pathNameStartsWithLanguage(pathname)) {
-        const availableLanguages = Object.keys(LANGUAGES).join('|');
+        const availableLanguages = Object.keys(LANGUAGES).join("|");
         const regex = new RegExp(`^\/(${availableLanguages})`);
         return pathname.replace(regex, `/${lang}`);
     }

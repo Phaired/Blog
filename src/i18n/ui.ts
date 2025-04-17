@@ -22,7 +22,8 @@ export const ui = {
     <code>astro.config.mjs</code> file. You can customize your setup with
     <a href="https://astro.build/integrations">Astro Integrations</a> to add
     tools like Tailwind, React, or Vue to your project.`,
-        "home.p3": "Here are a few ideas on how to get started with the template:",
+        "home.p3":
+            "Here are a few ideas on how to get started with the template:",
         "home.p3.0": "Handle translations in",
         "home.p3.1": "Edit this page in",
         "home.p3.2": "Edit translated pages in",
@@ -56,7 +57,8 @@ export const ui = {
         "home.p3.2": "Modifier les pages traduites dans",
         "home.p3.3": "Modifier les éléments de l'en-tête du site dans",
         "home.p3.4": "Ajouter votre nom au pied de page dans",
-        "home.p3.5": "Découvrez les articles de blog inclus en ES, EN et FR dans",
+        "home.p3.5":
+            "Découvrez les articles de blog inclus en ES, EN et FR dans",
         "home.p3.6": "Personnalisez la mise en page générale du site dans",
         "home.p3.7":
             "Personnalisez la mise en page de la page des articles de blog dans",
@@ -78,7 +80,8 @@ export const ui = {
 		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.`,
         "home.p1": `Bienvenido a la plantilla de inicio de blog oficial. Esta plantilla sirve como punto de partida ligero y con estilo mínimo para cualquiera que quiera construir un sitio web personal, un blog o un portafolio con Astro.`,
         "home.p2": `Esta plantilla viene con algunas integraciones ya configuradas en su archivo <code>astro.config.mjs</code>. Puede personalizar su configuración con <a href="https://astro.build/integrations">Astro Integrations</a> para agregar herramientas como Tailwind, React o Vue a su proyecto.`,
-        "home.p3": "Aquí hay algunas ideas sobre cómo comenzar con la plantilla:",
+        "home.p3":
+            "Aquí hay algunas ideas sobre cómo comenzar con la plantilla:",
         "home.p3.0": "Maneje las traducciones en",
         "home.p3.1": "Edite esta página en",
         "home.p3.2": "Editar páginas traducidas en",

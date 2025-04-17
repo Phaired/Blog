@@ -6,7 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import ReadingTime from "../../components/ReadingTime.astro";
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter } from "astro:transitions";
 import { Image } from "astro:assets";
 
 const posts = (await getCollection("blog")).sort(
@@ -99,11 +99,11 @@ const posts = (await getCollection("blog")).sort(
                             <li>
                                 <a href={`/blog/${post.slug}/`}>
                                     <Image
-                                            width={720}
-                                            height={360}
-                                            src={post.data.heroImage ?? ""}
-                                            alt=""
-                                            loading="lazy"
+                                        width={720}
+                                        height={360}
+                                        src={post.data.heroImage ?? ""}
+                                        alt=""
+                                        loading="lazy"
                                     />
                                     <h4 class="title">{post.data.title}</h4>
                                     <p class="date">

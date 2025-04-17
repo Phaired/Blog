@@ -31,19 +31,21 @@ Visit the live site: [remybarranco.fr](https://remybarranco.fr)
 ## 📦 Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Phaired/Blog.git
-   cd Blog
-   ```
+
+    ```bash
+    git clone https://github.com/Phaired/Blog.git
+    cd Blog
+    ```
 
 2. Install dependencies:
-   ```bash
-   # Using npm
-   npm install
 
-   # Or using Bun
-   bun install
-   ```
+    ```bash
+    # Using npm
+    npm install
+
+    # Or using Bun
+    bun install
+    ```
 
 ## 🖥️ Development
 
@@ -88,11 +90,12 @@ The site is automatically deployed to a VPS when changes are pushed to the main 
 To set up your own deployment:
 
 1. Configure the following secrets in your GitHub repository:
-   - `HOST`: Your server's hostname or IP address
-   - `USERNAME`: SSH username
-   - `SSHKEY`: SSH private key
-   - `PORT`: SSH port (usually 22)
-   - `SERVER_FOLDER`: Target directory on the server
+
+    - `HOST`: Your server's hostname or IP address
+    - `USERNAME`: SSH username
+    - `SSHKEY`: SSH private key
+    - `PORT`: SSH port (usually 22)
+    - `SERVER_FOLDER`: Target directory on the server
 
 2. Push to the main branch to trigger the deployment.
 

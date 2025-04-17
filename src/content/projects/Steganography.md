@@ -20,6 +20,7 @@ The hidden message is also encrypted using the RSA algorithm to ensure its secur
 One method to discreetly encode the message into the image is by embedding the message into the least significant bits of each color channel of each pixel. This allows encoding 3 bits of data per pixel. A pixel represents 3 colors (RGB), each encoded with 8 bits, totaling 24 bits per pixel. Thus, a 100x100 pixel image can accommodate 30,000 bits of data.
 
 ![Figure 1.1](/projects/steganography/leastbit.png)
+
 _Figure 1.1: Modification of the least significant bit for each pixel._
 
 One initial approach for encoding the message, given its variable length, is to read the entire image: this ensures retrieval of the entire message in all cases, but the message will contain noise after its end (unaltered least significant bits). An improvement would be to write/read only up to the message length.
@@ -111,7 +112,7 @@ The loop iterates over each byte of the image to insert the encoded message bits
 
 RSA encryption is an asymmetric cryptographic system using a pair of keys: a public key for encryption and a private key for decryption. Based on the difficulty of factoring large prime numbers, RSA is widely used to secure sensitive data.
 
-For our RSA implementation, we based it on the repository available on GitHub: [RSA-by-OCaml](https://github.com/MingLLuo/RSA-by-OCaml). This repository provided a solid foundation for implementing RSA in OCaml.
+For our RSA implementation, we based it on the repository available on GitHub:[RSA-by-OCaml](https://github.com/MingLLuo/RSA-by-OCaml). This repository provided a solid foundation for implementing RSA in OCaml.
 
 ### 4.1 Key Generation
 
@@ -215,7 +216,7 @@ Encryption and decryption processes involve converting the message into an integ
 
 Below is an example output of the program:
 
-```plaintext
+```text
 remybarranco@MacBook-Pro-de-Remy Projet-Algo % cat msg.txt
 OCaml is the best language%
 remybarranco@MacBook-Pro-de-Remy Projet-Algo % ./encode
@@ -230,7 +231,7 @@ remybarranco@MacBook-Pro-de-Remy Projet-Algo %
 **Benchmark with 100 Iterations Each:**
 
 | Data Size                        | Operation | Time (seconds) |
-|----------------------------------|-----------|----------------|
+| -------------------------------- | --------- | -------------- |
 | 10 characters (512x512 image)    | Encoding  | 1.520          |
 |                                  | Decoding  | 0.020          |
 | 100 characters (512x512 image)   | Encoding  | 1.360          |
@@ -251,7 +252,7 @@ Although RSA was covered in the cryptography course, we encountered it just befo
 ## 7. References
 
 - [RSA-by-OCaml](https://github.com/MingLLuo/RSA-by-OCaml)
-- ChatGPT
+- [ChatGPT](https://chatgpt.com)
 
 ---
 
