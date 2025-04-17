@@ -1,4 +1,6 @@
 ---
+import Image from "astro/components/Image.astro";
+
 const { heroImage, heroGif } = Astro.props;
 ---
 
@@ -51,20 +53,24 @@ const { heroImage, heroGif } = Astro.props;
 {
     heroImage && (
         <div class="hero-image-container">
-            <img
+            <Image
                 class="hero-image"
                 src={heroImage}
                 alt="Hero Image"
                 loading="lazy"
+                width="1020"
+                height="1020"
             />
 
             {heroGif && (
-                <img
+                <Image
                     class="hero-image hero-gif"
                     src={heroGif}
                     alt="Animated Hero Image"
                     loading="lazy"
                     onload="this.classList.add('visible');"
+                    width="1020"
+                    height="1020"
                 />
             )}
         </div>

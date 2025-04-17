@@ -43,40 +43,13 @@
 <script is:inline>
     const handleTheme = () => {
         const root = document.documentElement;
-        const themeIcon = document.getElementById("themeIcon");
         const themeToggle = document.getElementById("themeToggle");
+        if (!themeToggle) return;
 
-        if (!themeToggle || !themeIcon) return; // Protection contre les éléments manquants
-
-        const setTheme = (theme) => {
+        // Applique la classe en fonction du localStorage ou de la préférence
+        const applyTheme = (theme) => {
             root.classList.toggle("dark", theme === "dark");
             localStorage.setItem("theme", theme);
-
-            const isDark = theme === "dark";
-            const sunPath = themeIcon.querySelector(".sun");
-            const moonPath = themeIcon.querySelector(".moon");
-
-            if (sunPath && moonPath) {
-                sunPath.style.fill = isDark ? "transparent" : "black";
-                moonPath.style.fill = isDark ? "white" : "transparent";
-            }
-
-            const colors = {
-                "--color-text": isDark ? "229, 233, 240" : "15, 18, 25",
-                "--color-text-hover": isDark ? "96, 115, 159" : "34, 41, 57",
-                "--gradient-bg": isDark
-                    ? "rgba(34, 41, 57, 50%), #000"
-                    : "rgba(229, 233, 240, 50%), #fff",
-                "--bg-color": isDark ? "45, 47, 54" : "245, 245, 245",
-                "--bg-color-accent": isDark ? "35, 37, 44" : "225, 225, 225",
-                "--bg-color-code": isDark ? "25, 27, 34" : "229, 233, 240",
-                "--color-date": isDark ? "229, 233, 240" : "96, 115, 159",
-                "--color-text-title": isDark ? "239, 243, 250" : "25, 28, 35",
-            };
-
-            Object.entries(colors).forEach(([property, value]) => {
-                root.style.setProperty(property, value);
-            });
         };
 
         const getCurrentTheme = () => {
@@ -88,28 +61,22 @@
             );
         };
 
-        // Supprime l'ancien listener s'il existe
+        // On retire l’ancien écouteur si existant
         themeToggle.removeEventListener("click", themeToggle.clickHandler);
 
-        // Crée un nouveau listener
+        // On définit le nouveau handler qui ne fait QUE toggler la classe
         themeToggle.clickHandler = () => {
-            const newTheme = root.classList.contains("dark") ? "light" : "dark";
-            setTheme(newTheme);
+            const next = root.classList.contains("dark") ? "light" : "dark";
+            applyTheme(next);
         };
 
-        // Ajoute le nouveau listener
         themeToggle.addEventListener("click", themeToggle.clickHandler);
 
-        // Applique le thème initial
-        setTheme(getCurrentTheme());
+        // Initialisation
+        applyTheme(getCurrentTheme());
     };
 
-    // Initialisation au chargement
     document.addEventListener("DOMContentLoaded", handleTheme);
-
-    // Réinitialisation après les transitions Astro
     document.addEventListener("astro:after-swap", handleTheme);
-
-    // Gestion des transitions de page
     document.addEventListener("astro:page-load", handleTheme);
 </script>

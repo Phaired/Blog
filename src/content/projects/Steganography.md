@@ -230,7 +230,7 @@ remybarranco@MacBook-Pro-de-Remy Projet-Algo %
 **Benchmark with 100 Iterations Each:**
 
 | Data Size                        | Operation | Time (seconds) |
-| -------------------------------- | --------- | -------------- |
+|----------------------------------|-----------|----------------|
 | 10 characters (512x512 image)    | Encoding  | 1.520          |
 |                                  | Decoding  | 0.020          |
 | 100 characters (512x512 image)   | Encoding  | 1.360          |
