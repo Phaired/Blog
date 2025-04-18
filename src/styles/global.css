@@ -130,7 +130,6 @@ a:hover {
 p {
   margin-bottom: 1em;
   color: rgb(var(--color-text));
-  text-align: justify;
 }
 
 li {
