@@ -11,50 +11,59 @@ import { useTranslations } from "../i18n/utils"; // Ensure this is imported
 type entry = "blog" | "projects";
 type Props = CollectionEntry<entry>["data"] & { lang?: string };
 
-const { title, description, pubDate, updatedDate, heroImage, heroGif, lang = 'en' }: Props = Astro.props; // Default lang to 'en' if not provided
-const t = useTranslations(lang as keyof typeof import('../i18n/ui').ui); // Initialize t
+const {
+    title,
+    description,
+    pubDate,
+    updatedDate,
+    heroImage,
+    heroGif,
+    lang = "en",
+}: Props = Astro.props; // Default lang to 'en' if not provided
+const t = useTranslations(lang as keyof typeof import("../i18n/ui").ui); // Initialize t
 ---
 
-<html lang={lang}> {/* Used lang prop, no need for '|| en' due to default in props */}
-    <head>
-        <ClientRouter />
-        <BaseHead
-            title={title}
-            description={description}
-            image={heroGif ? heroGif : heroImage}
-        />
-        <style>
-            main {
-                width: calc(100% - 2em);
-                max-width: 100%;
-                margin: 0;
-                color: var(--color-text);
-            }
-            .prose {
-                width: 720px;
-                max-width: calc(100% - 2em);
-                margin: auto;
-                padding: 1em;
-            }
-            .title {
-                margin-bottom: 1em;
-                padding: 1em 0;
-                text-align: center;
-                line-height: 1;
-            }
+<html lang={lang}>
+    {/* Used lang prop, no need for '|| en' due to default in props */}
 
-            .title h1 {
-                margin: 0 0 0.5em 0;
-            }
-            .date {
-                margin-bottom: 0.5em;
-                color: rgb(var(--color-date));
-            }
-            .last-updated-on {
-                font-style: italic;
-            }
-        </style>
-    </head>
+    <ClientRouter />
+    <BaseHead
+        title={title}
+        description={description}
+        image={heroGif ? heroGif : heroImage}
+    />
+    <style>
+        main {
+            width: calc(100% - 2em);
+            max-width: 100%;
+            margin: 0;
+            color: var(--color-text);
+        }
+        .prose {
+            width: 720px;
+            max-width: calc(100% - 2em);
+            margin: auto;
+            padding: 1em;
+        }
+        .title {
+            margin-bottom: 1em;
+            padding: 1em 0;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .title h1 {
+            margin: 0 0 0.5em 0;
+        }
+        .date {
+            margin-bottom: 0.5em;
+            color: rgb(var(--color-date));
+        }
+        .last-updated-on {
+            font-style: italic;
+        }
+    </style>
+
     <body>
         <Header />
         <main>
@@ -67,7 +76,7 @@ const t = useTranslations(lang as keyof typeof import('../i18n/ui').ui); // Init
                             {
                                 updatedDate && (
                                     <div class="last-updated-on">
-                                        {t('post.lastUpdatedOn')}
+                                        {t("post.lastUpdatedOn")}
                                         <FormattedDate date={updatedDate} />
                                     </div>
                                 )

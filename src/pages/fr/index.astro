@@ -8,7 +8,7 @@ import { ClientRouter } from "astro:transitions";
 import { useTranslations } from "../../i18n/utils"; // Adjusted path
 
 // lang is now derived from Astro.params.lang for static pages in [lang] folders
-const lang = Astro.params.lang as keyof typeof import('../../i18n/ui').ui;
+const lang = Astro.params.lang as keyof typeof import("../../i18n/ui").ui;
 const t = useTranslations(lang);
 
 const age = () => {
@@ -23,26 +23,29 @@ const age = () => {
 <html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={t('site.consts.title')} description={t('site.consts.description')} />
+        <BaseHead
+            title={t("site.consts.title")}
+            description={t("site.consts.description")}
+        />
     </head>
     <body>
-        <Header title={t('site.consts.title')} />
+        <Header title={t("site.consts.title")} />
         <main>
-            <h2>{t('home.greeting')}</h2>
+            <h2>{t("home.greeting")}</h2>
             <p>
-                {t('home.intro')}
+                {t("home.intro")}
             </p>
-            <h3>{t('home.whoAmI')}</h3>
+            <h3>{t("home.whoAmI")}</h3>
             <p>
-                {t('home.whoAmIDetail', age())}
+                {t("home.whoAmIDetail", age())}
             </p>
-            <h3>{t('home.whyBlog')}</h3>
+            <h3>{t("home.whyBlog")}</h3>
             <p>
-                {t('home.whyBlogDetail')}
+                {t("home.whyBlogDetail")}
             </p>
-            <h3>{t('home.whatToShare')}</h3>
+            <h3>{t("home.whatToShare")}</h3>
             <p>
-                {t('home.whatToShareDetail')}
+                {t("home.whatToShareDetail")}
             </p>
         </main>
         <Footer />

@@ -11,12 +11,12 @@ import { Image } from "astro:assets";
 // import { getLangFromUrl } from "../../../i18n/utils"; // Removed
 import { useTranslations, getLocalizedPathname } from "../../../i18n/utils"; // Adjusted path
 
-const lang = Astro.params.lang as keyof typeof import('../../../i18n/ui').ui;
+const lang = Astro.params.lang as keyof typeof import("../../../i18n/ui").ui;
 const t = useTranslations(lang);
 
 const allPosts = await getCollection("blog");
 const posts = allPosts
-    .filter(post => post.slug.startsWith(lang + '/'))
+    .filter((post) => post.slug.startsWith(lang + "/"))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
@@ -24,7 +24,10 @@ const posts = allPosts
 <html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={t('site.consts.title')} description={t('site.consts.description')} />
+        <BaseHead
+            title={t("site.consts.title")}
+            description={t("site.consts.description")}
+        />
         <style>
             main {
                 width: 960px;
@@ -103,28 +106,34 @@ const posts = allPosts
                 <ul>
                     {
                         posts.map((post) => {
-                            const slugWithoutLang = post.slug.substring(post.slug.indexOf('/') + 1);
-                            const localizedLink = getLocalizedPathname(`/blog/${slugWithoutLang}`, lang);
+                            const slugWithoutLang = post.slug.substring(
+                                post.slug.indexOf("/") + 1,
+                            );
+                            const localizedLink = getLocalizedPathname(
+                                `/blog/${slugWithoutLang}`,
+                                lang,
+                            );
                             return (
-                            <li>
-                                <a href={localizedLink}>
-                                    <Image
-                                        width={720}
-                                        height={360}
-                                        src={post.data.heroImage ?? ""}
-                                        alt=""
-                                        loading="lazy"
-                                    />
-                                    <h4 class="title">{post.data.title}</h4>
-                                    <p class="date">
-                                        <FormattedDate
-                                            date={post.data.pubDate}
-                                        />{" "}
-                                        - <ReadingTime body={post.body} />
-                                    </p>
-                                </a>
-                            </li>
-                        )})
+                                <li>
+                                    <a href={localizedLink}>
+                                        <Image
+                                            width={720}
+                                            height={360}
+                                            src={post.data.heroImage ?? ""}
+                                            alt=""
+                                            loading="lazy"
+                                        />
+                                        <h4 class="title">{post.data.title}</h4>
+                                        <p class="date">
+                                            <FormattedDate
+                                                date={post.data.pubDate}
+                                            />{" "}
+                                            - <ReadingTime body={post.body} />
+                                        </p>
+                                    </a>
+                                </li>
+                            );
+                        })
                     }
                 </ul>
             </section>

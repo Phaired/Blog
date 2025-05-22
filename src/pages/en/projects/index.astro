@@ -11,12 +11,12 @@ import { Image } from "astro:assets";
 // import { getLangFromUrl } from "../../../i18n/utils"; // Removed
 import { useTranslations, getLocalizedPathname } from "../../../i18n/utils"; // Adjusted path
 
-const lang = Astro.params.lang as keyof typeof import('../../../i18n/ui').ui;
+const lang = Astro.params.lang as keyof typeof import("../../../i18n/ui").ui;
 const t = useTranslations(lang);
 
 const allProjects = await getCollection("projects");
 const posts = allProjects // Renamed from 'posts' to 'projects' for clarity, but instructions use 'posts'
-    .filter(post => post.slug.startsWith(lang + '/'))
+    .filter((post) => post.slug.startsWith(lang + "/"))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
@@ -24,7 +24,10 @@ const posts = allProjects // Renamed from 'posts' to 'projects' for clarity, but
 <html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={t('site.consts.title')} description={t('site.consts.description')} />
+        <BaseHead
+            title={t("site.consts.title")}
+            description={t("site.consts.description")}
+        />
         <style>
             main {
                 width: 1020px;
@@ -101,29 +104,36 @@ const posts = allProjects // Renamed from 'posts' to 'projects' for clarity, but
             <section>
                 <ul>
                     {
-                        posts.map((post) => { // Variable 'post' kept as per original code structure
-                            const slugWithoutLang = post.slug.substring(post.slug.indexOf('/') + 1);
-                            const localizedLink = getLocalizedPathname(`/projects/${slugWithoutLang}`, lang);
+                        posts.map((post) => {
+                            // Variable 'post' kept as per original code structure
+                            const slugWithoutLang = post.slug.substring(
+                                post.slug.indexOf("/") + 1,
+                            );
+                            const localizedLink = getLocalizedPathname(
+                                `/projects/${slugWithoutLang}`,
+                                lang,
+                            );
                             return (
-                            <li>
-                                <a href={localizedLink}>
-                                    <Image
-                                        width={720}
-                                        height={360}
-                                        src={post.data.heroImage ?? ""}
-                                        alt=""
-                                        loading="lazy"
-                                    />
-                                    <h4 class="title">{post.data.title}</h4>
-                                    <p class="date">
-                                        <FormattedDate
-                                            date={post.data.pubDate}
-                                        />{" "}
-                                        - <ReadingTime body={post.body} />
-                                    </p>
-                                </a>
-                            </li>
-                        )})
+                                <li>
+                                    <a href={localizedLink}>
+                                        <Image
+                                            width={720}
+                                            height={360}
+                                            src={post.data.heroImage ?? ""}
+                                            alt=""
+                                            loading="lazy"
+                                        />
+                                        <h4 class="title">{post.data.title}</h4>
+                                        <p class="date">
+                                            <FormattedDate
+                                                date={post.data.pubDate}
+                                            />{" "}
+                                            - <ReadingTime body={post.body} />
+                                        </p>
+                                    </a>
+                                </li>
+                            );
+                        })
                     }
                 </ul>
             </section>

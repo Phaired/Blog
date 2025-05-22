@@ -9,23 +9,23 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 export interface Props {
-	title?: string;
+    title?: string;
 }
 const { title } = Astro.props;
 ---
 
 <header>
     <nav>
-        <h2><a href="/">{title || t('site.consts.title')}</a></h2>
+        <h2><a href="/">{title || t("site.consts.title")}</a></h2>
         <div class="internal-links">
             {
                 /*
 				<HeaderLink href="/">Home</HeaderLink>
 				*/
             }
-            <HeaderLink href="/projects">{t('nav.projects')}</HeaderLink>
-            <HeaderLink href="/blog">{t('nav.blog')}</HeaderLink>
-            <HeaderLink href="/about">{t('nav.aboutLink')}</HeaderLink>
+            <HeaderLink href="/projects">{t("nav.projects")}</HeaderLink>
+            <HeaderLink href="/blog">{t("nav.blog")}</HeaderLink>
+            <HeaderLink href="/about">{t("nav.aboutLink")}</HeaderLink>
             <Theme />
             <LanguageSwitcher />
         </div>

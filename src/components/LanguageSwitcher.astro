@@ -1,21 +1,29 @@
 ---
-import { LANGUAGES, DEFAULT_LANG, getLangFromUrl, getLocalizedPathname } from '../i18n/utils';
+import {
+    LANGUAGES,
+    DEFAULT_LANG,
+    getLangFromUrl,
+    getLocalizedPathname,
+} from "../i18n/utils";
 
 const currentLang = getLangFromUrl(Astro.url);
 const currentPathname = Astro.url.pathname;
 ---
 
 <nav class="language-switcher">
-    {Object.entries(LANGUAGES).map(([lang, name]) => (
-        <a
-            href={getLocalizedPathname(currentPathname, lang as keyof typeof LANGUAGES)}
-            class:list={[
-                { active: currentLang === lang }
-            ]}
-        >
-            {name}
-        </a>
-    ))}
+    {
+        Object.entries(LANGUAGES).map(([lang, name]) => (
+            <a
+                href={getLocalizedPathname(
+                    currentPathname,
+                    lang as keyof typeof LANGUAGES,
+                )}
+                class:list={[{ active: currentLang === lang }]}
+            >
+                {name}
+            </a>
+        ))
+    }
 </nav>
 
 <style>
@@ -27,8 +35,12 @@ const currentPathname = Astro.url.pathname;
     .language-switcher a.active {
         font-weight: bold;
         text-decoration: underline;
-        text-decoration-color: var(--accent); /* Example: Use a CSS variable for accent color */
-        color: var(--accent-text);  /* Example: Use a CSS variable for text on accent color */
+        text-decoration-color: var(
+            --accent
+        ); /* Example: Use a CSS variable for accent color */
+        color: var(
+            --accent-text
+        ); /* Example: Use a CSS variable for text on accent color */
     }
     /* Basic styling for demonstration; can be customized further */
     .language-switcher {
