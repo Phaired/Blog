@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Post.astro";
+// import { getLangFromUrl } from "../i18n/utils"; // Removed
+import { useTranslations } from "../../i18n/utils"; // Adjusted path
+
+const lang = Astro.params.lang as keyof typeof import('../../i18n/ui').ui;
+const t = useTranslations(lang);
+
+const originalDate: Date = new Date(import.meta.env.BUILD_DATE);
+const formattedDate: string = originalDate.toLocaleString(lang === "fr" ? "fr-FR" : "en-US", { // Adjusted for lang
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+});
+---
+
+<Layout
+    title={t('about.pageTitle')}
+    description={t('about.pageDescription')}
+    pubDate={new Date("September 25 2023")}
+    heroImage=""
+    lang={lang} {/* Added lang prop */}
+>
+    <h4>{t('about.academicJourney')}</h4>
+    <p>
+        {t('about.academicJourneyDetail')}
+    </p>
+
+    <h5>{t('about.bts')}</h5>
+    <p>
+        {t('about.btsDetail')}
+    </p>
+
+    <h5>{t('about.licence')}</h5>
+    <p>
+        {t('about.licenceDetail')}
+    </p>
+
+    <h5>{t('about.master')}</h5>
+    <p>
+        {t('about.masterDetail')}
+    </p>
+
+    <h4>{t('about.serverInfo')}</h4>
+
+    <p>
+        {t('about.serverInfoDetail', formattedDate)}
+    </p>
+</Layout>
