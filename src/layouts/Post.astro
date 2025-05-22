@@ -6,15 +6,16 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
 import { ClientRouter } from "astro:transitions";
+import { useTranslations } from "../i18n/utils"; // Ensure this is imported
 
 type entry = "blog" | "projects";
-type Props = CollectionEntry<entry>["data"];
+type Props = CollectionEntry<entry>["data"] & { lang?: string };
 
-const { title, description, pubDate, updatedDate, heroImage, heroGif }: Props =
-    Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroGif, lang = 'en' }: Props = Astro.props; // Default lang to 'en' if not provided
+const t = useTranslations(lang as keyof typeof import('../i18n/ui').ui); // Initialize t
 ---
 
-<html lang="en">
+<html lang={lang}> {/* Used lang prop, no need for '|| en' due to default in props */}
     <head>
         <ClientRouter />
         <BaseHead
@@ -66,7 +67,7 @@ const { title, description, pubDate, updatedDate, heroImage, heroGif }: Props =
                             {
                                 updatedDate && (
                                     <div class="last-updated-on">
-                                        Last updated on{" "}
+                                        {t('post.lastUpdatedOn')}
                                         <FormattedDate date={updatedDate} />
                                     </div>
                                 )
