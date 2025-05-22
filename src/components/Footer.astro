@@ -1,18 +1,14 @@
 ---
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 const today = new Date();
 ---
 
 <footer>
-    <p>&copy; {today.getFullYear()} Rémy Barranco. {t('footer.rights')}</p>
+    <p>&copy; {today.getFullYear()} Rémy Barranco. All rights reserved.</p>
     <div class="social-links">
         <a
             href="https://github.com/phaired/blog"
             target="_blank"
-            aria-label={t('footer.githubAriaLabel')}
+            aria-label="Visit my GitHub"
         >
             <svg
                 viewBox="0 0 16 16"

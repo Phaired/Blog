@@ -3,7 +3,7 @@ import { ui } from "./ui";
 export const LANGUAGES = {
     en: "English",
     fr: "Français",
-    // es: "Español", // Removed
+    es: "Español",
 };
 
 export const DEFAULT_LANG = "en";
