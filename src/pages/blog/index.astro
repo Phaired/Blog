@@ -9,9 +9,9 @@ import ReadingTime from "../../components/ReadingTime.astro";
 import { ClientRouter } from "astro:transitions";
 import { Image } from "astro:assets";
 
-const posts = (await getCollection("blog")).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection("blog"))
+    .filter(post => post.data.isVisible)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
