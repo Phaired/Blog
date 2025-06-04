@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Post.astro";
+import { useTranslations } from "../../i18n/utils";
+
+const lang = Astro.params.lang;
+const t = useTranslations(lang);
+
+export function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'fr' } },
+    ];
+}
+
+const originalDate: Date = new Date(import.meta.env.BUILD_DATE);
+const formattedDate: string = originalDate.toLocaleString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+});
+---
+
+<Layout
+    lang={lang}
+    title={t('about.title')}
+    description={t('about.description')}
+    pubDate={new Date("September 25 2023")}
+    heroImage=""
+>
+    <h4>{t('about.academic.title')}</h4>
+    <p>{t('about.academic.text')}</p>
+
+    <h5>{t('about.bts.title')}</h5>
+    <p set:html={t('about.bts.text')}></p>
+
+    <h5>{t('about.lp.title')}</h5>
+    <p>{t('about.lp.text')}</p>
+
+    <h5>{t('about.master.title')}</h5>
+    <p>{t('about.master.text')}</p>
+
+    <h4>{t('about.server.title')}</h4>
+    <p set:html={t('about.server.text', formattedDate)}></p>
+</Layout>

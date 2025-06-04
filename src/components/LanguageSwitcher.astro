@@ -1,0 +1,33 @@
+---
+import { getLocalizedPathname } from "../i18n/utils";
+interface Props {
+  lang: string
+  slug?: string
+  altSlug?: string
+}
+const { lang, slug, altSlug }: Props = Astro.props;
+const flags = { en: "\ud83c\uddec\ud83c\udde7", fr: "\ud83c\uddeb\ud83c\uddf7" };
+const otherLang = lang === "en" ? "fr" : "en";
+---
+<div class="lang-switcher">
+  <a href={(() => {
+    let path = getLocalizedPathname(Astro.url.pathname, otherLang)
+    if (slug && altSlug) {
+      path = path.replace(slug, altSlug)
+    }
+    return path
+  })()} aria-label={otherLang}>
+    {flags[otherLang]}
+  </a>
+</div>
+<style>
+.lang-switcher {
+  display:flex;
+  gap:0.5em;
+  margin-left:0.5em;
+}
+.lang-switcher a {
+  text-decoration:none;
+  font-size:1.2em;
+}
+</style>

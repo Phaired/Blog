@@ -4,6 +4,8 @@ description: "Learn How to Create Your Own Blog: A Step-by-Step Guide to Hosting
 pubDate: "Sept 25 2023"
 updatedDate: "April 2 2024"
 heroImage: "/blog/blog-with-vps/blog-with-vps-hero.webp"
+lang: "en"
+altSlug: "blog-with-vpsfr"
 isVisible: true
 ---
 

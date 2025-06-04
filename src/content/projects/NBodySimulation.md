@@ -5,6 +5,8 @@ pubDate: "Jan 11 2024"
 updatedDate: "April 2 2024"
 heroImage: "/projects/nbody/nbody-hero.png"
 heroGif: "/projects/nbody/nbody-gif.gif"
+lang: "en"
+altSlug: "nbodysimulationfr"
 isVisible: true
 ---
 

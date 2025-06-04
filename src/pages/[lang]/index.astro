@@ -1,0 +1,46 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import { useTranslations } from "../../i18n/utils";
+const age = () => {
+    const birthdate = new Date("2001-03-25");
+    return Math.floor(
+        (new Date() - birthdate) / (365.25 * 24 * 60 * 60 * 1000),
+    );
+};
+
+const lang = Astro.params.lang;
+const t = useTranslations(lang);
+
+export function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'fr' } },
+    ];
+}
+---
+
+<!doctype html>
+<html lang={lang}>
+    <head>
+        <ClientRouter />
+        <BaseHead title={t('site.title')} description={t('site.description')} />
+    </head>
+    <body>
+        <Header lang={lang} title={t('site.title')} />
+        <main>
+            <h2>👨‍💻 {t('home.hello')}</h2>
+            <p>{t('home.intro')}</p>
+            <h3>{t('home.who.title')}</h3>
+            <p>{t('home.who.text', age)}</p>
+            <h3>{t('home.why.title')}</h3>
+            <p>{t('home.why.text')}</p>
+            <h3>{t('home.share.title')}</h3>
+            <p>{t('home.share.text')}</p>
+        </main>
+        <Footer />
+    </body>
+</html>
