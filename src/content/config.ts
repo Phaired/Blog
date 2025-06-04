@@ -10,9 +10,17 @@ const blog = defineCollection({
         updatedDate: z.coerce.date().optional(),
         heroImage: z.string().optional(),
         heroGif: z.string().optional(),
+        slug: z.string().optional(),
         lang: z.string(),
         isVisible: z.boolean().default(false),
     }),
+    slug: ({ id, data }) =>
+        data.slug ??
+        id
+            .split("/")
+            .pop()
+            ?.replace(/\.mdx?$/, "")
+            ?.replace(/\.fr$/, "") ?? id,
 });
 
 const projects = defineCollection({
@@ -25,9 +33,17 @@ const projects = defineCollection({
         updatedDate: z.coerce.date().optional(),
         heroImage: z.string().optional(),
         heroGif: z.string().optional(),
+        slug: z.string().optional(),
         lang: z.string(),
         isVisible: z.boolean().default(false),
     }),
+    slug: ({ id, data }) =>
+        data.slug ??
+        id
+            .split("/")
+            .pop()
+            ?.replace(/\.mdx?$/, "")
+            ?.replace(/\.fr$/, "") ?? id,
 });
 
 export const collections = {

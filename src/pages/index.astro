@@ -1,0 +1,15 @@
+---
+import { DEFAULT_LANG } from "../i18n/utils";
+const redirectUrl = `/${DEFAULT_LANG}/`;
+---
+
+<html>
+    <head>
+        <meta http-equiv="refresh" content={`0; url=${redirectUrl}`} />
+        <link rel="canonical" href={redirectUrl} />
+        <title>Redirecting...</title>
+    </head>
+    <body>
+        <p>Redirecting to <a href={redirectUrl}>{redirectUrl}</a></p>
+    </body>
+</html>

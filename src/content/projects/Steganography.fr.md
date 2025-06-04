@@ -184,16 +184,16 @@ remybarranco@MacBook-Pro-de-Remy Projet-Algo %
 
 **Benchmark pour 100 itérations :**
 
-| Taille des données                 | Opération | Temps (s) |
-| ---------------------------------- | --------- | --------- |
-| 10 caractères (512×512)            | Encodage  | 1.520     |
-|                                    | Décodage  | 0.020     |
-| 100 caractères (512×512)           | Encodage  | 1.360     |
-|                                    | Décodage  | 0.020     |
-| 10 caractères (5184×3456)          | Encodage  | 1.920     |
-|                                    | Décodage  | 0.020     |
-| 100 caractères (5184×3456)         | Encodage  | 1.820     |
-|                                    | Décodage  | 0.020     |
+| Taille des données         | Opération | Temps (s) |
+| -------------------------- | --------- | --------- |
+| 10 caractères (512×512)    | Encodage  | 1.520     |
+|                            | Décodage  | 0.020     |
+| 100 caractères (512×512)   | Encodage  | 1.360     |
+|                            | Décodage  | 0.020     |
+| 10 caractères (5184×3456)  | Encodage  | 1.920     |
+|                            | Décodage  | 0.020     |
+| 100 caractères (5184×3456) | Encodage  | 1.820     |
+|                            | Décodage  | 0.020     |
 
 _Tableau 1.1 : temps d'encodage et de décodage selon la taille des données_
 
