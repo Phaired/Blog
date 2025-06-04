@@ -6,8 +6,8 @@ import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { useTranslations } from "../i18n/utils";
 
 interface Props {
-    lang: string;
-    title?: string;
+  lang: string;
+  title?: string;
 }
 
 const { lang, title = SITE_TITLE }: Props = Astro.props;
@@ -15,24 +15,22 @@ const t = useTranslations(lang);
 ---
 
 <header>
-    <nav>
-        <h2><a href={`/${lang}/`}>{title}</a></h2>
-        <div class="internal-links">
-            {
-                /*
+  <div class="container">
+    <h2 class="logo"><a href={`/${lang}/`}>{title}</a></h2>
+    <nav class="internal-links">
+      {
+        /*
 				<HeaderLink href="/">Home</HeaderLink>
 				*/
-            }
-            <HeaderLink href={`/${lang}/projects`}
-                >{t("nav.projects")}</HeaderLink
-            >
-            <HeaderLink href={`/${lang}/blog`}>{t("nav.blog")}</HeaderLink>
-            <HeaderLink href={`/${lang}/about`}>{t("nav.about")}</HeaderLink>
-            <Theme />
-            <LanguageSwitcher lang={lang} />
-        </div>
+      }
+      <HeaderLink href={`/${lang}/projects`}>{t("nav.projects")}</HeaderLink>
+      <HeaderLink href={`/${lang}/blog`}>{t("nav.blog")}</HeaderLink>
+      <HeaderLink href={`/${lang}/about`}>{t("nav.about")}</HeaderLink>
+      <Theme />
+      <LanguageSwitcher lang={lang} />
+    </nav>
 
-        <!--		<div class="social-links">
+    <!--		<div class="social-links">
 			<a href="https://m.webtoo.ls/@astro" target="_blank">
 				<span class="sr-only">Follow Astro on Mastodon</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
@@ -61,63 +59,63 @@ const t = useTranslations(lang);
 				>
 			</a>
 		</div>-->
-    </nav>
+  </div>
 </header>
 <style>
-    .internal-links {
-        display: flex;
-        align-items: center;
-        gap: 1em;
-    }
+  .internal-links {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
 
-    header {
-        height: 6svh;
-        margin: 0;
-        padding: 0 1em;
-        background: rgb(var(--bg-color-accent));
-        box-shadow: 0 2px 8px rgba(var(--gray), 5%);
-    }
-    h2 {
-        margin: 0;
-        font-size: 1em;
-    }
+  header {
+    height: 6svh;
+    margin: 0;
+    padding: 0 1em;
+    background: rgb(var(--bg-color-accent));
+    box-shadow: 0 2px 8px rgba(var(--gray), 5%);
+  }
+  h2 {
+    margin: 0;
+    font-size: 1em;
+  }
 
-    h2 a,
-    h2 a.active {
-        text-decoration: none;
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  .container {
+    max-width: 1020px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .internal-links a {
+    padding: 0.5em;
+    color: var(--color-text);
+    /*border-bottom: 4px solid transparent;*/
+    text-decoration: none;
+  }
+  .internal-links a.active {
+    text-decoration: none;
+    border-bottom-color: var(--accent);
+  }
+  .social-links,
+  .social-links a {
+    display: flex;
+  }
+  @media (max-width: 720px) {
+    .social-links {
+      display: none;
     }
-    nav {
-        max-width: 1020px;
-        margin: auto;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .container {
+      flex-wrap: wrap;
+      gap: 0.5em;
     }
-    nav a {
-        padding: 0.5em;
-        color: var(--color-text);
-        /*border-bottom: 4px solid transparent;*/
-        text-decoration: none;
+    .internal-links a {
+      padding: 0.25em;
     }
-    nav a.active {
-        text-decoration: none;
-        border-bottom-color: var(--accent);
-    }
-    .social-links,
-    .social-links a {
-        display: flex;
-    }
-    @media (max-width: 720px) {
-        .social-links {
-            display: none;
-        }
-        nav {
-            flex-wrap: wrap;
-            gap: 0.5em;
-        }
-        nav a {
-            padding: 0.25em;
-        }
-    }
+  }
 </style>
