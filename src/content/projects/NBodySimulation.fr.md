@@ -236,4 +236,3 @@ Une piste d'amélioration aurait été d'exploiter la symétrie de la force grav
 #### Tolérance aux pannes
 
 Grâce à l'implémentation C++ d'OpenMPI, il était possible de définir une gestion des erreurs avec `MPI_Comm_set_errhandler` pour lever une `MPI::Exception` en cas de défaillance. Cela aurait permis d'identifier un nœud inactif, de l'exclure puis de relancer l'étape précédente. Cette solution n'a pas été mise en œuvre par manque de temps.
-
