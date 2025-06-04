@@ -109,34 +109,4 @@ export const ui = {
         "about.server.title": "Informations serveur",
         "about.server.text": "Ce site est hébergé sur <a href=\"https://pulseheberg.com\">pulseheberg</a> et la dernière mise à jour réussie date du {0}.",
     },
-    es: {
-        "site.title": "Astro Blog",
-        "site.description": "Bienvenido a mi sitio web!",
-        "nav.home": "Inicio",
-        "nav.about": "Quien soy",
-        "home.welcome": "Bienvenido a mi sitio web",
-        "about.title": "Sobre mi",
-        "about.description": "Soy un desarrollador web y me encanta Astro!",
-        "about.text": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.`,
-        "home.p1": `Bienvenido a la plantilla de inicio de blog oficial. Esta plantilla sirve como punto de partida ligero y con estilo mínimo para cualquiera que quiera construir un sitio web personal, un blog o un portafolio con Astro.`,
-        "home.p2": `Esta plantilla viene con algunas integraciones ya configuradas en su archivo <code>astro.config.mjs</code>. Puede personalizar su configuración con <a href="https://astro.build/integrations">Astro Integrations</a> para agregar herramientas como Tailwind, React o Vue a su proyecto.`,
-        "home.p3":
-            "Aquí hay algunas ideas sobre cómo comenzar con la plantilla:",
-        "home.p3.0": "Maneje las traducciones en",
-        "home.p3.1": "Edite esta página en",
-        "home.p3.2": "Editar páginas traducidas en",
-        "home.p3.3": "Edite los elementos de encabezado del sitio en",
-        "home.p3.4": "Agregue su nombre al pie de página en",
-        "home.p3.5":
-            "Consulte las publicaciones de blog incluidas en idiomas ES, EN y FR en",
-        "home.p3.6": "Personalice el diseño general del sitio en",
-        "home.p3.7":
-            "Personalice el diseño de la página de publicación del blog en",
-    },
 } as const;
