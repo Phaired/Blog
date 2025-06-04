@@ -5,6 +5,7 @@ pubDate: "April 30 2024"
 updatedDate: "Sept 23 2024"
 heroImage: "/projects/steganography/steganography-hero.png"
 heroGif: ""
+slug: "Steganography"
 lang: "en"
 isVisible: true
 ---

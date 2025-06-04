@@ -13,7 +13,7 @@ export async function GET(context) {
         site: context.site,
         items: posts.map((post) => ({
             ...post.data,
-            link: `/${DEFAULT_LANG}/blog/${post.slug}/`,
+            link: `/${DEFAULT_LANG}/blog/${post.data.slug}/`,
         })),
     });
 }
