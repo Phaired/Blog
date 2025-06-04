@@ -104,7 +104,9 @@ const posts = (await getCollection("projects"))
                     {
                         posts.map((post) => (
                             <li>
-                                <a href={`/${lang}/projects/${post.slug}/`}>
+                                <a
+                                    href={`/${lang}/projects/${post.slug.replace(/-(en|fr)$/, "")}/`}
+                                >
                                     <Image
                                         width={720}
                                         height={360}
