@@ -31,6 +31,9 @@ jobs:
       - name: Set build date
         run: echo 'BUILD_DATE="'$(date '+%Y-%m-%dT%H:%M:00')'"' > .env
 
+      - name: Generate content types
+        run: bun x astro sync
+
       - name: Build
         run: bun run build
 
