@@ -15,12 +15,14 @@ const blog = defineCollection({
         isVisible: z.boolean().default(false),
     }),
     slug: ({ id, data }) =>
-        data.slug ??
-        id
-            .split("/")
-            .pop()
-            ?.replace(/\.mdx?$/, "")
-            ?.replace(/\.fr$/, "") ?? id,
+        `${
+            (data.slug ??
+                id
+                    .split("/")
+                    .pop()
+                    ?.replace(/\.mdx?$/, "")
+                    ?.replace(/\.fr$/, "") ?? id)
+        }-${data.lang}`,
 });
 
 const projects = defineCollection({
@@ -38,12 +40,14 @@ const projects = defineCollection({
         isVisible: z.boolean().default(false),
     }),
     slug: ({ id, data }) =>
-        data.slug ??
-        id
-            .split("/")
-            .pop()
-            ?.replace(/\.mdx?$/, "")
-            ?.replace(/\.fr$/, "") ?? id,
+        `${
+            (data.slug ??
+                id
+                    .split("/")
+                    .pop()
+                    ?.replace(/\.mdx?$/, "")
+                    ?.replace(/\.fr$/, "") ?? id)
+        }-${data.lang}`,
 });
 
 export const collections = {
