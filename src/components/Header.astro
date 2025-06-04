@@ -23,9 +23,11 @@ const t = useTranslations(lang);
 				<HeaderLink href="/">Home</HeaderLink>
 				*/
             }
-            <HeaderLink href={`/${lang}/projects`}>{t('nav.projects')}</HeaderLink>
-            <HeaderLink href={`/${lang}/blog`}>{t('nav.blog')}</HeaderLink>
-            <HeaderLink href={`/${lang}/about`}>{t('nav.about')}</HeaderLink>
+            <HeaderLink href={`/${lang}/projects`}
+                >{t("nav.projects")}</HeaderLink
+            >
+            <HeaderLink href={`/${lang}/blog`}>{t("nav.blog")}</HeaderLink>
+            <HeaderLink href={`/${lang}/about`}>{t("nav.about")}</HeaderLink>
             <Theme />
             <LanguageSwitcher lang={lang} />
         </div>

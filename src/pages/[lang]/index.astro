@@ -16,10 +16,7 @@ const lang = Astro.params.lang;
 const t = useTranslations(lang);
 
 export function getStaticPaths() {
-    return [
-        { params: { lang: 'en' } },
-        { params: { lang: 'fr' } },
-    ];
+    return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
 }
 ---
 
@@ -27,19 +24,19 @@ export function getStaticPaths() {
 <html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={t('site.title')} description={t('site.description')} />
+        <BaseHead title={t("site.title")} description={t("site.description")} />
     </head>
     <body>
-        <Header lang={lang} title={t('site.title')} />
+        <Header lang={lang} title={t("site.title")} />
         <main>
-            <h2>👨‍💻 {t('home.hello')}</h2>
-            <p>{t('home.intro')}</p>
-            <h3>{t('home.who.title')}</h3>
-            <p>{t('home.who.text', age)}</p>
-            <h3>{t('home.why.title')}</h3>
-            <p>{t('home.why.text')}</p>
-            <h3>{t('home.share.title')}</h3>
-            <p>{t('home.share.text')}</p>
+            <h2>👨‍💻 {t("home.hello")}</h2>
+            <p>{t("home.intro")}</p>
+            <h3>{t("home.who.title")}</h3>
+            <p>{t("home.who.text", age)}</p>
+            <h3>{t("home.why.title")}</h3>
+            <p>{t("home.why.text")}</p>
+            <h3>{t("home.share.title")}</h3>
+            <p>{t("home.share.text")}</p>
         </main>
         <Footer />
     </body>

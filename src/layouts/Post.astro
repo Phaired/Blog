@@ -11,8 +11,15 @@ import { useTranslations } from "../i18n/utils";
 type entry = "blog" | "projects";
 type Props = CollectionEntry<entry>["data"] & { lang: string };
 
-const { title, description, pubDate, updatedDate, heroImage, heroGif, lang }:
-    Props = Astro.props;
+const {
+    title,
+    description,
+    pubDate,
+    updatedDate,
+    heroImage,
+    heroGif,
+    lang,
+}: Props = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -68,8 +75,11 @@ const t = useTranslations(lang);
                             {
                                 updatedDate && (
                                     <div class="last-updated-on">
-                                        {t('post.lastUpdated')}{" "}
-                                        <FormattedDate date={updatedDate} lang={lang} />
+                                        {t("post.lastUpdated")}{" "}
+                                        <FormattedDate
+                                            date={updatedDate}
+                                            lang={lang}
+                                        />
                                     </div>
                                 )
                             }

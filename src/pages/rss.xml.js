@@ -5,7 +5,7 @@ import { DEFAULT_LANG } from "../i18n/utils";
 
 export async function GET(context) {
     const posts = (await getCollection("blog")).filter(
-        p => p.data.lang === DEFAULT_LANG,
+        (p) => p.data.lang === DEFAULT_LANG,
     );
     return rss({
         title: SITE_TITLE,

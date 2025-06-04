@@ -14,7 +14,7 @@ const calculateReadingTime = (postContent) => {
     const contentAsString = postContent || ""; // Ensure the content is a string
     const wordCountInPost = wordCount(contentAsString);
     const readingTime = Math.ceil(wordCountInPost / wordsPerMinute);
-    return t('reading.minRead', readingTime);
+    return t("reading.minRead", readingTime);
 };
 ---
 

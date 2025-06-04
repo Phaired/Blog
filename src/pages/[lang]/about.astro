@@ -6,10 +6,7 @@ const lang = Astro.params.lang;
 const t = useTranslations(lang);
 
 export function getStaticPaths() {
-    return [
-        { params: { lang: 'en' } },
-        { params: { lang: 'fr' } },
-    ];
+    return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
 }
 
 const originalDate: Date = new Date(import.meta.env.BUILD_DATE);
@@ -24,23 +21,23 @@ const formattedDate: string = originalDate.toLocaleString("fr-FR", {
 
 <Layout
     lang={lang}
-    title={t('about.title')}
-    description={t('about.description')}
+    title={t("about.title")}
+    description={t("about.description")}
     pubDate={new Date("September 25 2023")}
     heroImage=""
 >
-    <h4>{t('about.academic.title')}</h4>
-    <p>{t('about.academic.text')}</p>
+    <h4>{t("about.academic.title")}</h4>
+    <p>{t("about.academic.text")}</p>
 
-    <h5>{t('about.bts.title')}</h5>
-    <p>{t('about.bts.text')}</p>
+    <h5>{t("about.bts.title")}</h5>
+    <p>{t("about.bts.text")}</p>
 
-    <h5>{t('about.lp.title')}</h5>
-    <p>{t('about.lp.text')}</p>
+    <h5>{t("about.lp.title")}</h5>
+    <p>{t("about.lp.text")}</p>
 
-    <h5>{t('about.master.title')}</h5>
-    <p>{t('about.master.text')}</p>
+    <h5>{t("about.master.title")}</h5>
+    <p>{t("about.master.text")}</p>
 
-    <h4>{t('about.server.title')}</h4>
-    <p>{t('about.server.text', formattedDate)}</p>
+    <h4>{t("about.server.title")}</h4>
+    <p>{t("about.server.text", formattedDate)}</p>
 </Layout>

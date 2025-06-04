@@ -11,16 +11,13 @@ import { Image } from "astro:assets";
 import { useTranslations } from "../../../i18n/utils";
 
 export function getStaticPaths() {
-    return [
-        { params: { lang: 'en' } },
-        { params: { lang: 'fr' } },
-    ];
+    return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
 }
 
 const lang = Astro.params.lang;
 const t = useTranslations(lang);
 const posts = (await getCollection("blog"))
-    .filter(post => post.data.isVisible && post.data.lang === lang)
+    .filter((post) => post.data.isVisible && post.data.lang === lang)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
@@ -28,7 +25,7 @@ const posts = (await getCollection("blog"))
 <html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={t('site.title')} description={t('site.description')} />
+        <BaseHead title={t("site.title")} description={t("site.description")} />
         <style>
             main {
                 width: 960px;
@@ -122,7 +119,11 @@ const posts = (await getCollection("blog"))
                                             date={post.data.pubDate}
                                             lang={lang}
                                         />{" "}
-                                        - <ReadingTime lang={lang} body={post.body} />
+                                        -{" "}
+                                        <ReadingTime
+                                            lang={lang}
+                                            body={post.body}
+                                        />
                                     </p>
                                 </a>
                             </li>
