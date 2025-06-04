@@ -1,27 +1,37 @@
 ---
-import BaseHead from "../../components/BaseHead.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import BaseHead from "../../../components/BaseHead.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../../consts";
 import { getCollection } from "astro:content";
-import FormattedDate from "../../components/FormattedDate.astro";
-import ReadingTime from "../../components/ReadingTime.astro";
+import FormattedDate from "../../../components/FormattedDate.astro";
+import ReadingTime from "../../../components/ReadingTime.astro";
 import { ClientRouter } from "astro:transitions";
 import { Image } from "astro:assets";
+import { useTranslations } from "../../../i18n/utils";
 
-const posts = (await getCollection("blog"))
-    .filter(post => post.data.isVisible)
+export function getStaticPaths() {
+    return [
+        { params: { lang: 'en' } },
+        { params: { lang: 'fr' } },
+    ];
+}
+
+const lang = Astro.params.lang;
+const t = useTranslations(lang);
+const posts = (await getCollection("projects"))
+    .filter(post => post.data.isVisible && post.data.lang === lang)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
     <head>
         <ClientRouter />
-        <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+        <BaseHead title={t('site.title')} description={t('site.description')} />
         <style>
             main {
-                width: 960px;
+                width: 1020px;
             }
             ul {
                 display: flex;
@@ -44,7 +54,7 @@ const posts = (await getCollection("blog"))
                 text-align: center;
             }
             ul li:first-child img {
-                width: 100%;
+                width: 1020px;
             }
             ul li:first-child .title {
                 font-size: 2.369rem;
@@ -64,7 +74,6 @@ const posts = (await getCollection("blog"))
             .date {
                 margin: 0;
                 color: rgb(var(--color-date));
-                text-align: center;
             }
             ul li a:hover h4,
             ul li a:hover .date {
@@ -91,14 +100,14 @@ const posts = (await getCollection("blog"))
         </style>
     </head>
     <body>
-        <Header />
+        <Header lang={lang} />
         <main>
             <section>
                 <ul>
                     {
                         posts.map((post) => (
                             <li>
-                                <a href={`/blog/${post.slug}/`}>
+                                <a href={`/${lang}/projects/${post.slug}/`}>
                                     <Image
                                         width={720}
                                         height={360}
@@ -110,8 +119,9 @@ const posts = (await getCollection("blog"))
                                     <p class="date">
                                         <FormattedDate
                                             date={post.data.pubDate}
+                                            lang={lang}
                                         />{" "}
-                                        - <ReadingTime body={post.body} />
+                                        - <ReadingTime lang={lang} body={post.body} />
                                     </p>
                                 </a>
                             </li>
@@ -120,6 +130,6 @@ const posts = (await getCollection("blog"))
                 </ul>
             </section>
         </main>
-        <Footer />
+        <Footer lang={lang} />
     </body>
 </html>

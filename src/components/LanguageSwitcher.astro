@@ -1,0 +1,22 @@
+---
+import { getLocalizedPathname, LANGUAGES } from "../i18n/utils";
+interface Props { lang: string }
+const { lang }: Props = Astro.props;
+const otherLangs = Object.keys(LANGUAGES).filter(l => l !== lang);
+---
+<div class="lang-switcher">
+  {otherLangs.map(l => (
+    <a href={getLocalizedPathname(Astro.url.pathname, l)}>{l.toUpperCase()}</a>
+  ))}
+</div>
+<style>
+.lang-switcher {
+  display:flex;
+  gap:0.5em;
+  margin-left:0.5em;
+}
+.lang-switcher a {
+  text-decoration:none;
+  font-size:0.8em;
+}
+</style>

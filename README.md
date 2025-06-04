@@ -14,7 +14,7 @@ Visit the live site: [remybarranco.fr](https://remybarranco.fr)
 - Mathematical content support with KaTeX
 - Responsive design
 - Automatic asset optimization
-- Internationalization support
+- Internationalization support (`/en/` and `/fr/` URLs)
 - RSS feed generation
 - Sitemap generation
 - Automatic deployment via GitHub Actions
@@ -122,6 +122,10 @@ Your content here...
 ### Projects
 
 Add new projects as Markdown or MDX files in the `src/content/projects/` directory.
+
+### Translations
+
+Pages are organized under `/[lang]/` where `lang` is `en` or `fr`. Strings are stored in `src/i18n/ui.ts`. Use the same keys for each language and retrieve them with `useTranslations(lang)` in your pages or components. To add a new translation, duplicate the content file with the `.fr.md` or `.en.md` suffix and set the `lang` frontmatter field.
 
 ## 🤝 Contributing
 
