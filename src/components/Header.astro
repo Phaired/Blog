@@ -2,21 +2,34 @@
 import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
 import Theme from "./ThemeIcon.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: string;
+    title?: string;
+}
+
+const { lang, title = SITE_TITLE }: Props = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <header>
     <nav>
-        <h2><a href="/">{SITE_TITLE}</a></h2>
+        <h2><a href={`/${lang}/`}>{title}</a></h2>
         <div class="internal-links">
             {
                 /*
 				<HeaderLink href="/">Home</HeaderLink>
 				*/
             }
-            <HeaderLink href="/projects">Projects</HeaderLink>
-            <HeaderLink href="/blog">Blog</HeaderLink>
-            <HeaderLink href="/about">About</HeaderLink>
+            <HeaderLink href={`/${lang}/projects`}
+                >{t("nav.projects")}</HeaderLink
+            >
+            <HeaderLink href={`/${lang}/blog`}>{t("nav.blog")}</HeaderLink>
+            <HeaderLink href={`/${lang}/about`}>{t("nav.about")}</HeaderLink>
             <Theme />
+            <LanguageSwitcher lang={lang} />
         </div>
 
         <!--		<div class="social-links">
