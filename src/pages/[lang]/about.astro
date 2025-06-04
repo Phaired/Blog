@@ -27,17 +27,17 @@ const formattedDate: string = originalDate.toLocaleString("fr-FR", {
     heroImage=""
 >
     <h4>{t("about.academic.title")}</h4>
-    <p>{t("about.academic.text")}</p>
+    <p set:html={t("about.academic.text")}></p>
 
     <h5>{t("about.bts.title")}</h5>
-    <p>{t("about.bts.text")}</p>
+    <p set:html={t("about.bts.text")}></p>
 
     <h5>{t("about.lp.title")}</h5>
-    <p>{t("about.lp.text")}</p>
+    <p set:html={t("about.lp.text")}></p>
 
     <h5>{t("about.master.title")}</h5>
-    <p>{t("about.master.text")}</p>
+    <p set:html={t("about.master.text")}></p>
 
     <h4>{t("about.server.title")}</h4>
-    <p>{t("about.server.text", formattedDate)}</p>
+    <p set:html={t("about.server.text", formattedDate)}></p>
 </Layout>
