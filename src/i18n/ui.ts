@@ -1,6 +1,6 @@
 export const ui = {
     en: {
-        "site.title": "Astro Blog",
+        "site.title": "Remy's Blog",
         "site.description": "Welcome to my website!",
         "nav.home": "Home",
         "nav.about": "About",
@@ -58,7 +58,7 @@ export const ui = {
         "home.p3.7": "Customize the blog post page layout in",
     },
     fr: {
-        "site.title": "Astro Blog",
+        "site.title": "Blog de Rémy",
         "site.description": "Bienvenue sur mon site web !",
         "nav.home": "Accueil",
         "nav.about": "À propos",
