@@ -76,7 +76,8 @@ function isActive(prefix: string) {
     }
 
     .container {
-        max-width: 1020px;
+        width: 1020px;
+        max-width: 100%;
         margin: 0 auto;
         display: flex;
         align-items: center;
@@ -84,6 +85,12 @@ function isActive(prefix: string) {
         gap: 0.75rem;
         position: relative;
         min-height: 3rem;
+    }
+
+    @media (max-width: 1020px) {
+        .container {
+            width: 100%;
+        }
     }
 
     /* ----- Logo ----- */
