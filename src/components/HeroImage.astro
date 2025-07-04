@@ -7,9 +7,9 @@ const { heroImage, heroGif } = Astro.props;
 <style>
     .hero-image-container {
         position: relative;
-        max-width: var(--content-width);
-        width: 100%;
-        margin: 0 auto;
+        width: 1020px;
+        max-width: 100%; /* Pour la responsivité sur petits écrans */
+        margin: 0 auto; /* Centre le conteneur */
         overflow: hidden;
         border-radius: 12px;
         box-shadow: var(--box-shadow);

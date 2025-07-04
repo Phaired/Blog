@@ -27,6 +27,9 @@ const posts = (await getCollection("projects"))
         <ClientRouter />
         <BaseHead title={t("site.title")} description={t("site.description")} />
         <style>
+            main {
+                width: 1020px;
+            }
             ul {
                 display: flex;
                 flex-wrap: wrap;
@@ -48,7 +51,7 @@ const posts = (await getCollection("projects"))
                 text-align: center;
             }
             ul li:first-child img {
-                width: 100%;
+                width: 1020px;
             }
             ul li:first-child .title {
                 font-size: 2.369rem;
