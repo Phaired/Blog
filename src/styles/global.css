@@ -20,6 +20,7 @@
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   --radius: 0.5rem;
   --box-shadow: var(--shadow);
+  --content-width: 960px;
 
   /* — Light‑theme tokens — */
   --bg-color: 248, 248, 250;
@@ -86,8 +87,8 @@ body {
 }
 main {
   flex: 1;
-  width: 720px;
-  max-width: calc(100% - 2em);
+  max-width: var(--content-width);
+  width: 100%;
   margin: auto;
   padding: 3em 1em;
   background-color: rgb(var(--bg-color));
