@@ -29,22 +29,22 @@ function isActive(prefix: string) {
         <!-- Navigation links -->
         <nav class="nav-main" aria-label="Main navigation">
             <HeaderLink
-                    href={`/${lang}/projects`}
-                    class:list={[isActive("/projects") ? "active" : ""]}
+                href={`/${lang}/projects`}
+                class:list={[isActive("/projects") ? "active" : ""]}
             >
                 {t("nav.projects")}
             </HeaderLink>
 
             <HeaderLink
-                    href={`/${lang}/blog`}
-                    class:list={[isActive("/blog") ? "active" : ""]}
+                href={`/${lang}/blog`}
+                class:list={[isActive("/blog") ? "active" : ""]}
             >
                 {t("nav.blog")}
             </HeaderLink>
 
             <HeaderLink
-                    href={`/${lang}/about`}
-                    class:list={[isActive("/about") ? "active" : ""]}
+                href={`/${lang}/about`}
+                class:list={[isActive("/about") ? "active" : ""]}
             >
                 {t("nav.about")}
             </HeaderLink>
