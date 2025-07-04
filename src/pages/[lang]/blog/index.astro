@@ -27,8 +27,8 @@ const posts = (await getCollection("blog"))
         <ClientRouter />
         <BaseHead title={t("site.title")} description={t("site.description")} />
         <style>
-            main {
-                width: 960px;
+            :root {
+                --content-width: 960px;
             }
             ul {
                 display: flex;
