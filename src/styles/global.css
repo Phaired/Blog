@@ -83,6 +83,7 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 main {
   flex: 1;
@@ -91,6 +92,7 @@ main {
   margin: auto;
   padding: 3em 1em;
   background-color: rgb(var(--bg-color));
+  transition: background-color 0.3s ease;
 }
 h1,
 h2,
@@ -101,6 +103,7 @@ h6 {
   margin: 0 0 0.5rem 0;
   color: rgb(var(--color-text-title));
   line-height: 1.2;
+  transition: color 0.3s ease;
 }
 h1 {
   font-size: 3.052em;
@@ -123,6 +126,7 @@ b {
 }
 a {
   color: rgb(var(--accent));
+  transition: color 0.3s ease;
 }
 a:hover {
   color: rgb(var(--accent-hover));
@@ -130,6 +134,7 @@ a:hover {
 p {
   margin-bottom: 1em;
   color: rgb(var(--color-text));
+  transition: color 0.3s ease;
 }
 
 li {
@@ -139,6 +144,7 @@ li {
   margin-bottom: 2em;
   color: rgb(var(--color-text));
   text-align: justify;
+  transition: color 0.3s ease;
 }
 textarea {
   width: 100%;
@@ -156,6 +162,7 @@ code {
   padding: 2px 5px;
   background-color: rgb(var(--bg-color-code));
   border-radius: 2px;
+  transition: background-color 0.3s ease;
 }
 pre {
   padding: 1.5em;
@@ -169,10 +176,12 @@ blockquote {
   padding: 0 0 0 20px;
   margin: 0px;
   font-size: 1.333em;
+  transition: border-color 0.3s ease;
 }
 hr {
   border: none;
   border-top: 1px solid rgb(var(--bg-color-code));
+  transition: border-color 0.3s ease;
 }
 @media (max-width: 720px) {
   body {
@@ -204,6 +213,7 @@ table {
   box-shadow: var(--shadow);
   background: rgb(var(--bg-color));
   font-family: "Atkinson", sans-serif;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 thead th {
@@ -212,12 +222,14 @@ thead th {
   padding: 1rem;
   text-align: left;
   font-size: 1em;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 tbody td {
   padding: 0.75rem 1rem;
   font-size: 0.95em;
   color: rgb(var(--color-text));
+  transition: color 0.3s ease;
 }
 
 table {
@@ -233,9 +245,11 @@ tbody td {
 
 tbody tr:nth-child(odd) {
   background-color: rgba(var(--gray-light), 0.15);
+  transition: background-color 0.3s ease;
 }
 tbody tr:nth-child(even) {
   background-color: rgba(var(--gray-light), 0.05);
+  transition: background-color 0.3s ease;
 }
 tbody tr:hover {
   background-color: rgba(var(--accent-hover), 0.1);
