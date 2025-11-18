@@ -18,6 +18,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install d2
+        run: curl -fsSL https://d2lang.com/install.sh | sh -s --
+
       - name: Install dependencies
         run: bun install
 

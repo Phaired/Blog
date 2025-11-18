@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import astroD2 from 'astro-d2'
 
 export default defineConfig({
   site: "https://remybarranco.fr",
@@ -20,6 +21,7 @@ export default defineConfig({
       JavaScript: true,
       SVG: false,
     }),
+      astroD2(),
   ],
   markdown: {
     remarkPlugins: [remarkMath],
