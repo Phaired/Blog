@@ -1,4 +1,4 @@
-FROM oven/bun:1 AS builder
+FROM oven/bun:debian AS builder
 
 WORKDIR /app
 
