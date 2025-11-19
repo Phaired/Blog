@@ -8,7 +8,7 @@ RUN curl -fsSL https://d2lang.com/install.sh | sh -s --
 
 ENV TZ=Europe/Paris
 
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 
 RUN bun install --frozen-lockfile
 
