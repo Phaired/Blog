@@ -10,18 +10,18 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.1.1",
-    "@astrojs/rss": "^4.0.11",
-    "@astrojs/sitemap": "^3.2.1",
-    "astro": "^5.10.1",
-    "astro-d2": "^0.8.0",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.16.6",
+    "astro-d2": "^0.8.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "word-count": "^0.2.2",
-    "astro-compress": "^2.3.6",
-    "prettier": "^3.5.3",
+    "astro-compress": "^2.3.8",
+    "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1"
   }
 }
