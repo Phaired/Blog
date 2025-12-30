@@ -1,0 +1,533 @@
+---
+import { useTranslations } from "../i18n/utils";
+
+interface Heading {
+    depth: number;
+    slug: string;
+    text: string;
+}
+
+interface Props {
+    headings: Heading[];
+    lang: string;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+    tocHeadings.length > 0 && (
+        <aside class="toc-sidebar" aria-label={t("toc.label")}>
+            <nav class="toc-nav">
+                <h3 class="toc-title">{t("toc.title")}</h3>
+                <div class="toc-scroll">
+                    <svg class="toc-svg" aria-hidden="true">
+                        <path class="toc-path-bg" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div class="toc-fill-mask" aria-hidden="true">
+                        <div class="toc-thumb"></div>
+                    </div>
+                    <div class="toc-items">
+                        {tocHeadings.map((heading) => (
+                            <a
+                                href={`#${heading.slug}`}
+                                class="toc-link"
+                                data-depth={heading.depth}
+                            >
+                                {heading.text}
+                            </a>
+                        ))}
+                    </div>
+                    <div class="toc-end-circle" aria-hidden="true"></div>
+                    <div class="toc-active-circle" aria-hidden="true"></div>
+                </div>
+            </nav>
+        </aside>
+    )
+}
+
+<script>
+    const CORNER_RADIUS = 4;
+    const MIN_X_OFFSET = 4;
+    const ANIMATION_DURATION = 150;
+
+    function getLineOffset(depth: number): number {
+        return depth <= 2 ? 0 : 13;
+    }
+
+    function getItemOffset(depth: number): number {
+        if (depth <= 2) return 15;
+        if (depth === 3) return 27;
+        return 39;
+    }
+
+    interface PathSegment {
+        offset: number;
+        top: number;
+        bottom: number;
+    }
+
+    interface TocSvgData {
+        path: string;
+        width: number;
+        height: number;
+        endX: number;
+        endY: number;
+        segments: PathSegment[];
+    }
+
+    function buildSvgPath(segments: PathSegment[]): string {
+        const d: string[] = [];
+
+        for (let i = 0; i < segments.length; i++) {
+            const seg = segments[i];
+            const prevSeg = segments[i - 1];
+            const nextSeg = segments[i + 1];
+
+            if (i === 0) {
+                d.push(`M${seg.offset} ${seg.top}`);
+            } else if (prevSeg && seg.offset !== prevSeg.offset) {
+                d.push(`Q${seg.offset} ${seg.top},${seg.offset} ${seg.top + CORNER_RADIUS}`);
+            } else {
+                d.push(`L${seg.offset} ${seg.top}`);
+            }
+
+            if (nextSeg && seg.offset !== nextSeg.offset) {
+                const cornerBottom = seg.bottom;
+                d.push(`L${seg.offset} ${cornerBottom - CORNER_RADIUS}`);
+                const nextTop = nextSeg.top;
+                const dx = nextSeg.offset - seg.offset;
+                const dy = nextTop - cornerBottom;
+                const diagLength = Math.sqrt(dx * dx + dy * dy);
+                const ratio = Math.min(CORNER_RADIUS / diagLength, 0.5);
+                const midX = seg.offset + dx * ratio;
+                const midY = cornerBottom + dy * ratio;
+                d.push(`Q${seg.offset} ${cornerBottom},${midX} ${midY}`);
+                const endRatio = 1 - Math.min(CORNER_RADIUS / diagLength, 0.5);
+                const endX = seg.offset + dx * endRatio;
+                const endY = cornerBottom + dy * endRatio;
+                d.push(`L${endX} ${endY}`);
+            } else {
+                d.push(`L${seg.offset} ${seg.bottom}`);
+            }
+        }
+
+        return d.join(" ");
+    }
+
+    function computeTocData(container: HTMLElement, links: NodeListOf<HTMLAnchorElement>): TocSvgData | null {
+        if (links.length === 0 || container.clientHeight === 0) return null;
+
+        let w = 0;
+        let h = 0;
+        const segments: PathSegment[] = [];
+
+        links.forEach((link, i) => {
+            const depth = parseInt(link.dataset.depth || "2");
+            const styles = getComputedStyle(link);
+            const offset = Math.max(MIN_X_OFFSET, getLineOffset(depth) + 1);
+            const top = link.offsetTop + parseFloat(styles.paddingTop);
+
+            const isLastItem = i === links.length - 1;
+            const paddingTop = parseFloat(styles.paddingTop);
+            const paddingBottom = parseFloat(styles.paddingBottom);
+            const contentHeight = link.clientHeight - paddingTop - paddingBottom;
+            const bottom = isLastItem
+                ? link.offsetTop + paddingTop + contentHeight / 2
+                : link.offsetTop + link.clientHeight - paddingBottom;
+
+            w = Math.max(offset, w);
+            h = Math.max(h, bottom);
+            segments.push({ offset, top, bottom });
+        });
+
+        const path = buildSvgPath(segments);
+        const lastSeg = segments[segments.length - 1];
+
+        return {
+            path,
+            width: w + 1,
+            height: h,
+            endX: lastSeg?.offset ?? 1,
+            endY: lastSeg?.bottom ?? h,
+            segments,
+        };
+    }
+
+    function getCircleX(segments: PathSegment[], y: number): number {
+        for (let i = 0; i < segments.length; i++) {
+            const seg = segments[i];
+            const nextSeg = segments[i + 1];
+
+            if (y >= seg.top && y <= seg.bottom) return seg.offset;
+
+            if (nextSeg && y > seg.bottom && y < nextSeg.top) {
+                const t = (y - seg.bottom) / (nextSeg.top - seg.bottom);
+                return seg.offset + t * (nextSeg.offset - seg.offset);
+            }
+        }
+        return segments[segments.length - 1]?.offset ?? MIN_X_OFFSET;
+    }
+
+    function calcThumbPosition(
+        container: HTMLElement,
+        links: NodeListOf<HTMLAnchorElement>,
+        activeIndex: number
+    ): [top: number, height: number, bottomY: number] {
+        if (activeIndex < 0 || container.clientHeight === 0) {
+            return [0, 0, 0];
+        }
+
+        const lastActiveElement = links[activeIndex];
+        if (!lastActiveElement) return [0, 0, 0];
+
+        const lastStyles = getComputedStyle(lastActiveElement);
+        const paddingTop = parseFloat(lastStyles.paddingTop);
+        const paddingBottom = parseFloat(lastStyles.paddingBottom);
+        const contentHeight = lastActiveElement.clientHeight - paddingTop - paddingBottom;
+        const lastItemCenter = lastActiveElement.offsetTop + paddingTop + contentHeight / 2;
+
+        const firstElement = links[0];
+        if (!firstElement) return [0, lastItemCenter, lastItemCenter];
+
+        const firstStyles = getComputedStyle(firstElement);
+        const lineStart = firstElement.offsetTop + parseFloat(firstStyles.paddingTop);
+
+        return [lineStart, lastItemCenter - lineStart, lastItemCenter];
+    }
+
+    function cssEaseOut(t: number): number {
+        return 1 - Math.pow(1 - t, 3);
+    }
+
+    function initTOC() {
+        const sidebar = document.querySelector(".toc-sidebar") as HTMLElement;
+        if (!sidebar) return;
+
+        const container = document.querySelector(".toc-items") as HTMLElement;
+        const links = document.querySelectorAll(".toc-link") as NodeListOf<HTMLAnchorElement>;
+        const svg = document.querySelector(".toc-svg") as SVGSVGElement;
+        const pathBg = document.querySelector(".toc-path-bg") as SVGPathElement;
+        const fillMask = document.querySelector(".toc-fill-mask") as HTMLElement;
+        const thumb = document.querySelector(".toc-thumb") as HTMLElement;
+        const endCircle = document.querySelector(".toc-end-circle") as HTMLElement;
+        const activeCircle = document.querySelector(".toc-active-circle") as HTMLElement;
+
+        if (!container || !links.length || !svg || !pathBg || !fillMask || !thumb || !endCircle || !activeCircle) return;
+
+        let tocData: TocSvgData | null = null;
+        let currentThumbHeight = 0;
+        let currentCircleY = 0;
+        let animationId: number | null = null;
+        let isInitialized = false;
+
+        function rebuildSvg() {
+            tocData = computeTocData(container, links);
+            if (!tocData) return;
+
+            pathBg.setAttribute("d", tocData.path);
+            svg.style.width = `${tocData.width + 3}px`;
+            svg.style.height = `${tocData.height + 3}px`;
+
+            fillMask.style.width = `${tocData.width}px`;
+            fillMask.style.height = `${tocData.height}px`;
+            fillMask.style.maskImage = `url("data:image/svg+xml,${encodeURIComponent(
+                `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${tocData.width} ${tocData.height}"><path d="${tocData.path}" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" /></svg>`
+            )}")`;
+
+            endCircle.style.left = `${tocData.endX}px`;
+            endCircle.style.top = `${tocData.endY}px`;
+
+            // Update link styles
+            links.forEach((link) => {
+                const depth = parseInt(link.dataset.depth || "2");
+                link.style.paddingInlineStart = `${getItemOffset(depth)}px`;
+            });
+        }
+
+        function getActiveIndex(): number {
+            const headings = document.querySelectorAll("article h2[id], article h3[id]");
+            if (!headings.length) return -1;
+
+            const offset = 100;
+            let activeIndex = -1;
+
+            headings.forEach((heading, index) => {
+                const rect = heading.getBoundingClientRect();
+                if (rect.top <= offset) {
+                    activeIndex = index;
+                }
+            });
+
+            return activeIndex;
+        }
+
+        function setPositionImmediate(height: number, circleY: number) {
+            if (!tocData || tocData.segments.length === 0) return;
+
+            thumb.style.height = `${height}px`;
+
+            const x = getCircleX(tocData.segments, circleY);
+            activeCircle.style.left = `${x}px`;
+            activeCircle.style.top = `${circleY}px`;
+            activeCircle.style.opacity = "1";
+
+            currentThumbHeight = height;
+            currentCircleY = circleY;
+        }
+
+        function animateTo(targetHeight: number, targetY: number) {
+            if (!tocData || tocData.segments.length === 0) return;
+
+            const startHeight = currentThumbHeight;
+            const startY = currentCircleY;
+            const startTime = performance.now();
+
+            if (animationId) cancelAnimationFrame(animationId);
+
+            const tick = (now: number) => {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+                const eased = cssEaseOut(progress);
+
+                const height = startHeight + (targetHeight - startHeight) * eased;
+                thumb.style.height = `${height}px`;
+                currentThumbHeight = height;
+
+                const y = startY + (targetY - startY) * eased;
+                const x = getCircleX(tocData!.segments, y);
+                activeCircle.style.left = `${x}px`;
+                activeCircle.style.top = `${y}px`;
+                currentCircleY = y;
+
+                if (progress < 1) {
+                    animationId = requestAnimationFrame(tick);
+                }
+            };
+
+            animationId = requestAnimationFrame(tick);
+        }
+
+        function updateState() {
+            const activeIndex = getActiveIndex();
+
+            // Update active class
+            links.forEach((link, index) => {
+                link.classList.toggle("active", index === activeIndex);
+            });
+
+            if (activeIndex < 0 || !tocData) return;
+
+            const [top, height, bottomY] = calcThumbPosition(container, links, activeIndex);
+            thumb.style.transform = `translateY(${top}px)`;
+
+            if (!isInitialized) {
+                if (height > 0) {
+                    setPositionImmediate(height, bottomY);
+                    isInitialized = true;
+                }
+                return;
+            }
+
+            animateTo(height, bottomY);
+        }
+
+        function updateVisibility() {
+            const firstHeading = document.querySelector("article h2[id]");
+            if (firstHeading) {
+                const rect = firstHeading.getBoundingClientRect();
+                sidebar.classList.toggle("visible", rect.top <= 150);
+            }
+        }
+
+        // Click handler
+        links.forEach((link) => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const href = link.getAttribute("href");
+                if (!href) return;
+                const id = href.slice(1); // Remove the #
+                const target = document.getElementById(id);
+                if (target) {
+                    const top = target.getBoundingClientRect().top + window.scrollY - 20;
+                    window.scrollTo({ top, behavior: "smooth" });
+                }
+            });
+        });
+
+        // Init
+        rebuildSvg();
+        updateVisibility();
+        updateState();
+
+        // Scroll
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateVisibility();
+                    updateState();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Resize
+        const resizeObserver = new ResizeObserver(() => {
+            rebuildSvg();
+            isInitialized = false;
+            updateState();
+        });
+        resizeObserver.observe(container);
+    }
+
+    document.addEventListener("astro:page-load", initTOC);
+</script>
+
+<style>
+    .toc-sidebar {
+        position: fixed;
+        left: max(1rem, calc((100vw - 1200px) / 2 - 280px));
+        top: 50%;
+        transform: translateY(-50%);
+        width: 240px;
+        max-height: 75vh;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+    }
+
+    @media (min-width: 1400px) {
+        .toc-sidebar {
+            display: block;
+        }
+        .toc-sidebar.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .toc-nav {
+        padding: 1rem;
+        background: rgba(var(--bg-color-accent), 0.8);
+        backdrop-filter: blur(8px);
+        border-radius: var(--radius);
+        border: 1px solid rgba(var(--gray), 0.2);
+        box-shadow: var(--shadow);
+    }
+
+    .toc-title {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgb(var(--color-date));
+        margin: 0 0 0.75rem 0;
+    }
+
+    .toc-scroll {
+        position: relative;
+        max-height: calc(75vh - 80px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0.5rem 0;
+    }
+
+    .toc-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+    .toc-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .toc-scroll::-webkit-scrollbar-thumb {
+        background: rgba(var(--gray), 0.3);
+        border-radius: 2px;
+    }
+
+    .toc-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+    }
+
+    .toc-path-bg {
+        stroke: rgba(var(--gray), 0.2);
+    }
+
+    .toc-fill-mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+    }
+
+    .toc-thumb {
+        background: rgb(var(--accent));
+        width: 100%;
+        height: 0;
+        transition: transform 0.15s ease-out;
+    }
+
+    .toc-items {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .toc-link {
+        position: relative;
+        display: block;
+        padding: 0.375rem 0;
+        font-size: 0.8rem;
+        line-height: 1.25rem;
+        color: rgb(var(--color-text));
+        text-decoration: none;
+        opacity: 0.6;
+        transition: opacity 0.15s, color 0.15s;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .toc-link:first-child {
+        padding-top: 0;
+    }
+
+    .toc-link:last-child {
+        padding-bottom: 0;
+    }
+
+    .toc-link:hover {
+        opacity: 1;
+        color: rgb(var(--accent-hover));
+    }
+
+    .toc-link.active {
+        opacity: 1;
+        color: rgb(var(--accent));
+    }
+
+    .toc-end-circle,
+    .toc-active-circle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    .toc-end-circle {
+        background: rgba(var(--gray), 0.2);
+    }
+
+    .toc-active-circle {
+        background: rgb(var(--accent));
+        opacity: 0;
+    }
+</style>
