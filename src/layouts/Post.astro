@@ -5,11 +5,21 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
+import TableOfContents from "../components/TableOfContents.astro";
 import { ClientRouter } from "astro:transitions";
 import { useTranslations } from "../i18n/utils";
 
+interface Heading {
+    depth: number;
+    slug: string;
+    text: string;
+}
+
 type entry = "blog" | "projects";
-type Props = CollectionEntry<entry>["data"] & { lang: string };
+type Props = CollectionEntry<entry>["data"] & {
+    lang: string;
+    headings?: Heading[];
+};
 
 const {
     title,
@@ -19,6 +29,7 @@ const {
     heroImage,
     heroGif,
     lang,
+    headings = [],
 }: Props = Astro.props;
 const t = useTranslations(lang);
 ---
@@ -65,6 +76,7 @@ const t = useTranslations(lang);
     </head>
     <body>
         <Header lang={lang} />
+        <TableOfContents headings={headings} lang={lang} />
         <main>
             <article>
                 <HeroImage heroImage={heroImage} heroGif={heroGif} />

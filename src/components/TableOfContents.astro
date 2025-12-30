@@ -1,0 +1,385 @@
+---
+import { useTranslations } from "../i18n/utils";
+
+interface Heading {
+    depth: number;
+    slug: string;
+    text: string;
+}
+
+interface Props {
+    headings: Heading[];
+    lang: string;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Filter to only include h2 and h3
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+    tocHeadings.length > 0 && (
+        <aside class="toc-sidebar" aria-label={t("toc.label")}>
+            <nav class="toc-nav">
+                <h2 class="toc-title">{t("toc.title")}</h2>
+                <div class="toc-content">
+                    <svg
+                        class="toc-progress-svg"
+                        aria-hidden="true"
+                        preserveAspectRatio="none"
+                    >
+                        <path
+                            class="toc-progress-bg"
+                            d="M 0 0 V 0"
+                            fill="none"
+                            stroke-width="2"
+                        />
+                        <path
+                            class="toc-progress-fill"
+                            d="M 0 0 V 0"
+                            fill="none"
+                            stroke-width="2"
+                        />
+                    </svg>
+                    <ul class="toc-list">
+                        {tocHeadings.map((heading, index) => (
+                            <li
+                                class={`toc-item toc-depth-${heading.depth}`}
+                                data-index={index}
+                            >
+                                <a href={`#${heading.slug}`} data-slug={heading.slug}>
+                                    <span class="toc-marker" />
+                                    <span class="toc-text">{heading.text}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+    )
+}
+
+<script>
+    function initTOC() {
+        const tocSidebar = document.querySelector(".toc-sidebar");
+        if (!tocSidebar) return;
+
+        const tocItems = document.querySelectorAll(".toc-item");
+        const tocLinks = document.querySelectorAll(".toc-item a");
+        const progressBg = document.querySelector(
+            ".toc-progress-bg"
+        ) as SVGPathElement;
+        const progressFill = document.querySelector(
+            ".toc-progress-fill"
+        ) as SVGPathElement;
+
+        if (!tocItems.length || !progressBg || !progressFill) return;
+
+        // Build the SVG path based on item positions
+        function updateSVGPath() {
+            const tocList = document.querySelector(".toc-list");
+            const markers = document.querySelectorAll(".toc-marker");
+            if (!tocList || !markers.length) return;
+
+            const listRect = tocList.getBoundingClientRect();
+            let pathD = "";
+
+            markers.forEach((marker, index) => {
+                const markerRect = marker.getBoundingClientRect();
+                const y = markerRect.top - listRect.top + markerRect.height / 2;
+                const x = 8;
+
+                if (index === 0) {
+                    pathD += `M ${x} ${y}`;
+                } else {
+                    pathD += ` L ${x} ${y}`;
+                }
+            });
+
+            progressBg.setAttribute("d", pathD);
+            progressFill.setAttribute("d", pathD);
+
+            // Calculate total path length
+            const pathLength = progressBg.getTotalLength();
+            progressFill.style.strokeDasharray = `${pathLength}`;
+            progressFill.style.strokeDashoffset = `${pathLength}`;
+        }
+
+        // Update active state and progress
+        function updateActiveState() {
+            const headings = document.querySelectorAll(
+                "article h2[id], article h3[id]"
+            );
+            if (!headings.length) return;
+
+            const scrollTop = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const docHeight = document.documentElement.scrollHeight;
+
+            // Calculate scroll progress (0 to 1)
+            const scrollProgress = Math.min(
+                scrollTop / (docHeight - windowHeight),
+                1
+            );
+
+            // Find active heading (the one currently in view or just passed)
+            let activeIndex = -1;
+            const offset = windowHeight * 0.2; // 20% from top of viewport
+
+            headings.forEach((heading, index) => {
+                const rect = heading.getBoundingClientRect();
+                if (rect.top <= offset) {
+                    activeIndex = index;
+                }
+            });
+
+            // Update active classes
+            tocItems.forEach((item, index) => {
+                const isActive = index === activeIndex;
+                const isPassed = index < activeIndex;
+
+                item.classList.toggle("active", isActive);
+                item.classList.toggle("passed", isPassed);
+            });
+
+            // Update SVG progress
+            if (progressFill) {
+                const pathLength = progressFill.getTotalLength();
+                if (pathLength > 0 && tocItems.length > 0) {
+                    // Calculate progress based on active heading position
+                    let progress = 0;
+                    if (activeIndex >= 0) {
+                        progress = (activeIndex + 1) / tocItems.length;
+                    }
+
+                    // Smooth progress based on scroll position within current section
+                    if (activeIndex >= 0 && activeIndex < headings.length - 1) {
+                        const currentHeading = headings[activeIndex];
+                        const nextHeading = headings[activeIndex + 1];
+                        const currentTop =
+                            currentHeading.getBoundingClientRect().top +
+                            scrollTop;
+                        const nextTop =
+                            nextHeading.getBoundingClientRect().top + scrollTop;
+                        const sectionProgress = Math.min(
+                            Math.max(
+                                (scrollTop + offset - currentTop) /
+                                    (nextTop - currentTop),
+                                0
+                            ),
+                            1
+                        );
+
+                        progress =
+                            (activeIndex + sectionProgress) / tocItems.length;
+                    }
+
+                    const dashOffset = pathLength * (1 - progress);
+                    progressFill.style.strokeDashoffset = `${dashOffset}`;
+                }
+            }
+        }
+
+        // Smooth scroll to heading on click
+        tocLinks.forEach((link) => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const slug = (link as HTMLAnchorElement).dataset.slug;
+                const target = document.getElementById(slug || "");
+                if (target) {
+                    const offset = 80; // Account for any fixed header
+                    const top =
+                        target.getBoundingClientRect().top +
+                        window.scrollY -
+                        offset;
+                    window.scrollTo({ top, behavior: "smooth" });
+                }
+            });
+        });
+
+        // Initialize
+        updateSVGPath();
+        updateActiveState();
+
+        // Update on scroll with throttling
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateActiveState();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Update SVG path on resize
+        window.addEventListener("resize", () => {
+            requestAnimationFrame(updateSVGPath);
+        });
+    }
+
+    // Initialize on page load and view transitions
+    document.addEventListener("astro:page-load", initTOC);
+</script>
+
+<style>
+    .toc-sidebar {
+        position: fixed;
+        left: max(1rem, calc((100vw - 1200px) / 2 - 280px));
+        top: 50%;
+        transform: translateY(-50%);
+        width: 220px;
+        max-height: 70vh;
+        z-index: 100;
+        display: none;
+    }
+
+    @media (min-width: 1400px) {
+        .toc-sidebar {
+            display: block;
+        }
+    }
+
+    .toc-nav {
+        padding: 1rem;
+        background: rgba(var(--bg-color-accent), 0.8);
+        backdrop-filter: blur(8px);
+        border-radius: var(--radius);
+        border: 1px solid rgba(var(--gray), 0.2);
+        box-shadow: var(--shadow);
+    }
+
+    .toc-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgb(var(--color-date));
+        margin: 0 0 0.75rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(var(--gray), 0.3);
+    }
+
+    .toc-content {
+        position: relative;
+        overflow-y: auto;
+        max-height: calc(70vh - 4rem);
+    }
+
+    .toc-progress-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 16px;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .toc-progress-bg {
+        stroke: rgba(var(--gray), 0.3);
+    }
+
+    .toc-progress-fill {
+        stroke: rgb(var(--accent));
+        transition: stroke-dashoffset 0.15s ease-out;
+    }
+
+    .toc-list {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 1.25rem;
+    }
+
+    .toc-item {
+        position: relative;
+        margin: 0;
+        padding: 0.25rem 0;
+    }
+
+    .toc-item a {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        color: rgb(var(--color-text));
+        text-decoration: none;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        padding: 0.25rem 0;
+        transition: color 0.2s ease;
+        opacity: 0.7;
+    }
+
+    .toc-item a:hover {
+        color: rgb(var(--accent-hover));
+        opacity: 1;
+    }
+
+    .toc-item.active a {
+        color: rgb(var(--accent));
+        font-weight: 600;
+        opacity: 1;
+    }
+
+    .toc-item.passed a {
+        opacity: 0.5;
+    }
+
+    .toc-marker {
+        position: absolute;
+        left: -1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(var(--gray), 0.4);
+        border: 2px solid rgba(var(--bg-color-accent), 1);
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .toc-item.active .toc-marker {
+        background: rgb(var(--accent));
+        transform: translateY(-50%) scale(1.3);
+        box-shadow: 0 0 0 3px rgba(var(--accent), 0.2);
+    }
+
+    .toc-item.passed .toc-marker {
+        background: rgb(var(--accent));
+        opacity: 0.6;
+    }
+
+    .toc-text {
+        flex: 1;
+    }
+
+    .toc-depth-3 {
+        padding-left: 0.75rem;
+    }
+
+    .toc-depth-3 a {
+        font-size: 0.75rem;
+    }
+
+    /* Scrollbar styling for TOC */
+    .toc-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .toc-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .toc-content::-webkit-scrollbar-thumb {
+        background: rgba(var(--gray), 0.3);
+        border-radius: 2px;
+    }
+
+    .toc-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--gray), 0.5);
+    }
+</style>
