@@ -25,10 +25,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 <h3 class="toc-title">{t("toc.title")}</h3>
                 <div class="toc-scroll">
                     <svg class="toc-svg" aria-hidden="true">
-                        <path class="toc-path-bg" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            class="toc-path-bg"
+                            fill="none"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
                     </svg>
                     <div class="toc-fill-mask" aria-hidden="true">
-                        <div class="toc-thumb"></div>
+                        <div class="toc-thumb" />
                     </div>
                     <div class="toc-items">
                         {tocHeadings.map((heading) => (
@@ -41,8 +47,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                             </a>
                         ))}
                     </div>
-                    <div class="toc-end-circle" aria-hidden="true"></div>
-                    <div class="toc-active-circle" aria-hidden="true"></div>
+                    <div class="toc-end-circle" aria-hidden="true" />
+                    <div class="toc-active-circle" aria-hidden="true" />
                 </div>
             </nav>
         </aside>
@@ -90,7 +96,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             if (i === 0) {
                 d.push(`M${seg.offset} ${seg.top}`);
             } else if (prevSeg && seg.offset !== prevSeg.offset) {
-                d.push(`Q${seg.offset} ${seg.top},${seg.offset} ${seg.top + CORNER_RADIUS}`);
+                d.push(
+                    `Q${seg.offset} ${seg.top},${seg.offset} ${seg.top + CORNER_RADIUS}`,
+                );
             } else {
                 d.push(`L${seg.offset} ${seg.top}`);
             }
@@ -118,7 +126,10 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         return d.join(" ");
     }
 
-    function computeTocData(container: HTMLElement, links: NodeListOf<HTMLAnchorElement>): TocSvgData | null {
+    function computeTocData(
+        container: HTMLElement,
+        links: NodeListOf<HTMLAnchorElement>,
+    ): TocSvgData | null {
         if (links.length === 0 || container.clientHeight === 0) return null;
 
         let w = 0;
@@ -134,7 +145,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             const isLastItem = i === links.length - 1;
             const paddingTop = parseFloat(styles.paddingTop);
             const paddingBottom = parseFloat(styles.paddingBottom);
-            const contentHeight = link.clientHeight - paddingTop - paddingBottom;
+            const contentHeight =
+                link.clientHeight - paddingTop - paddingBottom;
             const bottom = isLastItem
                 ? link.offsetTop + paddingTop + contentHeight / 2
                 : link.offsetTop + link.clientHeight - paddingBottom;
@@ -175,7 +187,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     function calcThumbPosition(
         container: HTMLElement,
         links: NodeListOf<HTMLAnchorElement>,
-        activeIndex: number
+        activeIndex: number,
     ): [top: number, height: number, bottomY: number] {
         if (activeIndex < 0 || container.clientHeight === 0) {
             return [0, 0, 0];
@@ -187,14 +199,17 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         const lastStyles = getComputedStyle(lastActiveElement);
         const paddingTop = parseFloat(lastStyles.paddingTop);
         const paddingBottom = parseFloat(lastStyles.paddingBottom);
-        const contentHeight = lastActiveElement.clientHeight - paddingTop - paddingBottom;
-        const lastItemCenter = lastActiveElement.offsetTop + paddingTop + contentHeight / 2;
+        const contentHeight =
+            lastActiveElement.clientHeight - paddingTop - paddingBottom;
+        const lastItemCenter =
+            lastActiveElement.offsetTop + paddingTop + contentHeight / 2;
 
         const firstElement = links[0];
         if (!firstElement) return [0, lastItemCenter, lastItemCenter];
 
         const firstStyles = getComputedStyle(firstElement);
-        const lineStart = firstElement.offsetTop + parseFloat(firstStyles.paddingTop);
+        const lineStart =
+            firstElement.offsetTop + parseFloat(firstStyles.paddingTop);
 
         return [lineStart, lastItemCenter - lineStart, lastItemCenter];
     }
@@ -208,15 +223,33 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         if (!sidebar) return;
 
         const container = document.querySelector(".toc-items") as HTMLElement;
-        const links = document.querySelectorAll(".toc-link") as NodeListOf<HTMLAnchorElement>;
+        const links = document.querySelectorAll(
+            ".toc-link",
+        ) as NodeListOf<HTMLAnchorElement>;
         const svg = document.querySelector(".toc-svg") as SVGSVGElement;
         const pathBg = document.querySelector(".toc-path-bg") as SVGPathElement;
-        const fillMask = document.querySelector(".toc-fill-mask") as HTMLElement;
+        const fillMask = document.querySelector(
+            ".toc-fill-mask",
+        ) as HTMLElement;
         const thumb = document.querySelector(".toc-thumb") as HTMLElement;
-        const endCircle = document.querySelector(".toc-end-circle") as HTMLElement;
-        const activeCircle = document.querySelector(".toc-active-circle") as HTMLElement;
+        const endCircle = document.querySelector(
+            ".toc-end-circle",
+        ) as HTMLElement;
+        const activeCircle = document.querySelector(
+            ".toc-active-circle",
+        ) as HTMLElement;
 
-        if (!container || !links.length || !svg || !pathBg || !fillMask || !thumb || !endCircle || !activeCircle) return;
+        if (
+            !container ||
+            !links.length ||
+            !svg ||
+            !pathBg ||
+            !fillMask ||
+            !thumb ||
+            !endCircle ||
+            !activeCircle
+        )
+            return;
 
         let tocData: TocSvgData | null = null;
         let currentThumbHeight = 0;
@@ -235,7 +268,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             fillMask.style.width = `${tocData.width}px`;
             fillMask.style.height = `${tocData.height}px`;
             fillMask.style.maskImage = `url("data:image/svg+xml,${encodeURIComponent(
-                `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${tocData.width} ${tocData.height}"><path d="${tocData.path}" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" /></svg>`
+                `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${tocData.width} ${tocData.height}"><path d="${tocData.path}" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" /></svg>`,
             )}")`;
 
             endCircle.style.left = `${tocData.endX}px`;
@@ -249,7 +282,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         }
 
         function getActiveIndex(): number {
-            const headings = document.querySelectorAll("article h2[id], article h3[id]");
+            const headings = document.querySelectorAll(
+                "article h2[id], article h3[id]",
+            );
             if (!headings.length) return -1;
 
             const offset = 100;
@@ -293,7 +328,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
                 const eased = cssEaseOut(progress);
 
-                const height = startHeight + (targetHeight - startHeight) * eased;
+                const height =
+                    startHeight + (targetHeight - startHeight) * eased;
                 thumb.style.height = `${height}px`;
                 currentThumbHeight = height;
 
@@ -321,7 +357,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
             if (activeIndex < 0 || !tocData) return;
 
-            const [top, height, bottomY] = calcThumbPosition(container, links, activeIndex);
+            const [top, height, bottomY] = calcThumbPosition(
+                container,
+                links,
+                activeIndex,
+            );
             thumb.style.transform = `translateY(${top}px)`;
 
             if (!isInitialized) {
@@ -352,7 +392,10 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 const id = href.slice(1); // Remove the #
                 const target = document.getElementById(id);
                 if (target) {
-                    const top = target.getBoundingClientRect().top + window.scrollY - 20;
+                    const top =
+                        target.getBoundingClientRect().top +
+                        window.scrollY -
+                        20;
                     window.scrollTo({ top, behavior: "smooth" });
                 }
             });
@@ -399,7 +442,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         z-index: 100;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+        transition:
+            opacity 0.2s ease-out,
+            visibility 0.2s ease-out;
     }
 
     @media (min-width: 1400px) {
@@ -488,7 +533,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         color: rgb(var(--color-text));
         text-decoration: none;
         opacity: 0.6;
-        transition: opacity 0.15s, color 0.15s;
+        transition:
+            opacity 0.15s,
+            color 0.15s;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
