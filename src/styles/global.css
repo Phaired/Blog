@@ -7,7 +7,6 @@
   /* — Light variants — */
   --color-turquoise-comp: 79, 235, 220; /* #4FEBDC */
   --color-mocha-comp: 184, 137, 114; /* #B88972 */
-  --color-ray-flower-comp: 253, 224, 71; /* #FDE047 */
 
   /* — Legacy aliases — */
   --accent: var(--color-mocha-mousse);
@@ -38,7 +37,7 @@
   --bg-color: 26, 26, 29;
   --bg-color-accent: 34, 36, 42;
   --color-text: 230, 230, 230;
-  --color-text-hover: var(--color-ray-flower);
+  --color-text-hover: var(--color-turquoise-comp);
   --color-text-title: 255, 255, 255;
   --color-date: 167, 167, 167;
   --bg-color-code: 38, 38, 44;
