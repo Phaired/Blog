@@ -25,18 +25,72 @@ export function getStaticPaths() {
     <head>
         <ClientRouter />
         <BaseHead title={t("site.title")} description={t("site.description")} />
+        <style>
+            .hero {
+                text-align: center;
+                padding: 4rem 1rem 3rem;
+                position: relative;
+            }
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: -40%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 70%);
+                pointer-events: none;
+                z-index: -1;
+            }
+            .hero-greeting {
+                font-size: 1rem;
+                font-weight: 500;
+                color: rgb(var(--accent));
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 0.5rem;
+            }
+            .hero-title {
+                font-size: clamp(2.5rem, 6vw, 4rem);
+                margin-bottom: 1rem;
+                line-height: 1.1;
+            }
+            .hero-subtitle {
+                font-size: 1.1rem;
+                color: rgb(var(--color-date));
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+            .home-content {
+                padding: 1rem 0 2rem;
+            }
+            .home-content h3 {
+                margin-top: 1.5rem;
+            }
+            @media (max-width: 768px) {
+                .hero {
+                    padding: 2.5rem 1rem 2rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <Header lang={lang} title={t("site.title")} />
         <main>
-            <h2>👨‍💻 {t("home.hello")}</h2>
-            <p>{t("home.intro")}</p>
-            <h3>{t("home.who.title")}</h3>
-            <p>{t("home.who.text", age)}</p>
-            <h3>{t("home.why.title")}</h3>
-            <p>{t("home.why.text")}</p>
-            <h3>{t("home.share.title")}</h3>
-            <p>{t("home.share.text")}</p>
+            <section class="hero">
+                <h1 class="hero-title gradient-text">{t("site.title")}</h1>
+                <p class="hero-subtitle">{t("home.intro")}</p>
+            </section>
+            <section class="home-content">
+                <h3>{t("home.who.title")}</h3>
+                <p>{t("home.who.text", age)}</p>
+                <h3>{t("home.why.title")}</h3>
+                <p>{t("home.why.text")}</p>
+                <h3>{t("home.share.title")}</h3>
+                <p>{t("home.share.text")}</p>
+            </section>
         </main>
         <Footer />
     </body>

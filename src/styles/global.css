@@ -1,50 +1,49 @@
 :root {
-  /* — Core palette (RGB lists) — */
-  --color-ray-flower: 251, 191, 36; /* #FBBF24 */
-  --color-mocha-mousse: 164, 120, 100; /* #A47864 */
-  --color-turquoise: 100, 149, 237; /* #40E0D0 */
-
-  /* — Light variants — */
-  --color-turquoise-comp: 79, 235, 220; /* #4FEBDC */
-  --color-mocha-comp: 184, 137, 114; /* #B88972 */
-
-  /* — Legacy aliases — */
-  --accent: var(--color-mocha-mousse);
-  --accent-hover: var(--color-turquoise);
-  --accent-dark: 139, 102, 85; /* Dark Mocha shade */
+  /* — Accent — */
+  --accent: 170, 130, 20;
+  --accent-hover: 140, 100, 10;
 
   /* — Neutrals & backgrounds — */
-  --gray: 200, 200, 200;
-  --gray-light: 240, 240, 240;
+  --gray: 200, 198, 192;
+  --gray-light: 240, 238, 232;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --radius: 0.5rem;
+  --radius: 0.75rem;
   --box-shadow: var(--shadow);
 
-  /* — Light‑theme tokens — */
-  --bg-color: 248, 248, 250;
-  --bg-color-accent: 238, 242, 247;
-  --color-text: 33, 33, 33;
+  /* — Light-theme tokens — */
+  --bg-color: 250, 248, 244;
+  --bg-color-accent: 242, 238, 232;
+  --color-text: 35, 35, 45;
   --color-text-hover: var(--accent);
-  --color-text-title: 0, 0, 0;
-  --color-date: 99, 102, 106;
-  --bg-color-code: 243, 244, 246;
+  --color-text-title: 15, 15, 25;
+  --color-date: 110, 110, 125;
+  --bg-color-code: 235, 232, 225;
+
+  /* — Glass & glow — */
+  --bg-glass: rgba(250, 248, 244, 0.7);
+  --border-glass: rgba(200, 198, 192, 0.25);
+  --color-accent-glow: rgba(170, 130, 20, 0.15);
 }
 
 :root.dark {
-  --accent: var(--color-mocha-comp);
-  --accent-hover: var(--color-turquoise-comp);
-  --accent-dark: 144, 105, 88;
-  --bg-color: 26, 26, 29;
-  --bg-color-accent: 34, 36, 42;
-  --color-text: 230, 230, 230;
-  --color-text-hover: var(--color-turquoise-comp);
-  --color-text-title: 255, 255, 255;
-  --color-date: 167, 167, 167;
-  --bg-color-code: 38, 38, 44;
-  --gray: 60, 60, 60;
-  --gray-light: 90, 90, 90;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --accent: 212, 175, 55;
+  --accent-hover: 245, 215, 110;
+  --bg-color: 13, 13, 20;
+  --bg-color-accent: 20, 20, 32;
+  --color-text: 210, 210, 220;
+  --color-text-hover: 245, 215, 110;
+  --color-text-title: 245, 240, 230;
+  --color-date: 140, 140, 160;
+  --bg-color-code: 24, 24, 36;
+  --gray: 55, 55, 75;
+  --gray-light: 40, 40, 55;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   --box-shadow: var(--shadow);
+
+  /* — Glass & glow (dark) — */
+  --bg-glass: rgba(13, 13, 20, 0.75);
+  --border-glass: rgba(212, 175, 55, 0.12);
+  --color-accent-glow: rgba(212, 175, 55, 0.12);
 }
 
 /* =================================================
@@ -54,21 +53,38 @@
    ================================================= */
 
 @font-face {
-  font-family: "Atkinson";
-  src: url("/fonts/atkinson-regular.woff") format("woff");
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Atkinson";
-  src: url("/fonts/atkinson-bold.woff") format("woff");
+  font-family: "Inter";
+  src: url("/fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+html {
+  scrollbar-gutter: stable;
+}
 body {
-  font-family: "Atkinson", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -77,12 +93,14 @@ body {
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: rgb(var(--color-text));
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.7;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 main {
   flex: 1;
@@ -102,6 +120,8 @@ h6 {
   margin: 0 0 0.5rem 0;
   color: rgb(var(--color-text-title));
   line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   transition: color 0.3s ease;
 }
 h1 {
@@ -125,10 +145,12 @@ b {
 }
 a {
   color: rgb(var(--accent));
-  transition: color 0.3s ease;
+  text-underline-offset: 3px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 a:hover {
   color: rgb(var(--accent-hover));
+  text-shadow: 0 0 12px var(--color-accent-glow);
 }
 p {
   margin-bottom: 1em;
@@ -171,15 +193,17 @@ pre > code {
   all: unset;
 }
 blockquote {
-  border-left: 4px solid rgb(var(--accent));
+  border-left: 3px solid rgba(var(--accent), 0.5);
   padding: 0 0 0 20px;
-  margin: 0px;
+  margin: 0;
   font-size: 1.333em;
-  transition: border-color 0.3s ease;
+  background: rgba(var(--accent), 0.03);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 hr {
   border: none;
-  border-top: 1px solid rgb(var(--bg-color-code));
+  border-top: 1px solid rgba(var(--accent), 0.15);
   transition: border-color 0.3s ease;
 }
 @media (max-width: 720px) {
@@ -211,7 +235,7 @@ table {
   overflow: hidden;
   box-shadow: var(--shadow);
   background: rgb(var(--bg-color));
-  font-family: "Atkinson", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -278,6 +302,46 @@ button {
   a,
   button {
     padding: 1em;
+  }
+}
+
+/* ========== Utility Classes ========== */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius);
+}
+.glow-accent {
+  box-shadow: 0 0 20px var(--color-accent-glow);
+}
+.gradient-text {
+  background: linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-hover)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--color-accent-glow);
+}
+.divider-gold {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--accent), 0.5), transparent);
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

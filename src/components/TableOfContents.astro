@@ -414,10 +414,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
     .toc-nav {
         padding: 1rem;
-        background: rgba(var(--bg-color-accent), 0.8);
-        backdrop-filter: blur(8px);
+        background: var(--bg-glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border-radius: var(--radius);
-        border: 1px solid rgba(var(--gray), 0.2);
+        border: 1px solid rgba(var(--accent), 0.1);
         box-shadow: var(--shadow);
     }
 
@@ -426,7 +427,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: rgb(var(--color-date));
+        color: rgb(var(--accent));
         margin: 0 0 0.75rem 0;
     }
 

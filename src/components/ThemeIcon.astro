@@ -24,9 +24,14 @@
         border: 0;
         background: none;
         cursor: pointer;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+    }
+    #themeToggle:hover {
+        background-color: rgba(var(--accent), 0.1);
     }
     .sun {
-        fill: black;
+        fill: rgb(var(--color-text));
         transition: fill 0.3s ease;
     }
     .moon {
@@ -38,7 +43,7 @@
         fill: transparent;
     }
     :root.dark .moon {
-        fill: white;
+        fill: rgb(var(--accent));
     }
 </style>
 

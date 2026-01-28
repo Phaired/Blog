@@ -57,17 +57,24 @@ const t = useTranslations(lang);
             }
             .title {
                 margin-bottom: 1em;
-                padding: 1em 0;
+                padding: 1.5em 0;
                 text-align: center;
                 line-height: 1;
             }
 
             .title h1 {
-                margin: 0 0 0.5em 0;
+                margin: 0 0 0.75em 0;
+            }
+            .title hr {
+                border: none;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(var(--accent), 0.5), transparent);
             }
             .date {
                 margin-bottom: 0.5em;
                 color: rgb(var(--color-date));
+                font-size: 0.9rem;
+                font-weight: 500;
             }
             .last-updated-on {
                 font-style: italic;

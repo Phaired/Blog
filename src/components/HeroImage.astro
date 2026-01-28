@@ -8,12 +8,23 @@ const { heroImage, heroGif } = Astro.props;
     .hero-image-container {
         position: relative;
         width: 1020px;
-        max-width: 100%; /* Pour la responsivité sur petits écrans */
-        margin: 0 auto; /* Centre le conteneur */
+        max-width: 100%;
+        margin: 0 auto;
         overflow: hidden;
-        border-radius: 12px;
+        border-radius: var(--radius);
         box-shadow: var(--box-shadow);
-        background-color: var(--skeleton-color, #f0f0f0);
+        background-color: rgb(var(--bg-color-accent));
+    }
+
+    .hero-image-container::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(to top, rgb(var(--bg-color)), transparent);
+        pointer-events: none;
     }
 
     .hero-image {
@@ -35,12 +46,6 @@ const { heroImage, heroGif } = Astro.props;
 
     .hero-gif.visible {
         opacity: 1;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        .hero-image-container {
-            --skeleton-color: #2a2a2a;
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {
