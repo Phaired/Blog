@@ -6,7 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../../../consts";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../../components/FormattedDate.astro";
 import ReadingTime from "../../../components/ReadingTime.astro";
-import { ClientRouter } from "astro:transitions";
+import { ClientRouter, fade } from "astro:transitions";
 import { Image } from "astro:assets";
 import { useTranslations } from "../../../i18n/utils";
 
@@ -98,7 +98,7 @@ const posts = (await getCollection("blog"))
     </head>
     <body>
         <Header lang={lang} />
-        <main>
+        <main transition:animate={fade({ duration: '0.15s' })}>
             <section>
                 <ul>
                     {

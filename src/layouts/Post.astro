@@ -6,7 +6,7 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
 import TableOfContents from "../components/TableOfContents.astro";
-import { ClientRouter } from "astro:transitions";
+import { ClientRouter, fade } from "astro:transitions";
 import { useTranslations } from "../i18n/utils";
 
 interface Heading {
@@ -87,7 +87,7 @@ const t = useTranslations(lang);
         <main>
             <article>
                 <HeroImage heroImage={heroImage} heroGif={heroGif} />
-                <div class="prose" transition:animate="fade">
+                <div class="prose" transition:animate={fade({ duration: '0.15s' })}>
                     <div class="title">
                         <div class="date">
                             <FormattedDate date={pubDate} lang={lang} />
