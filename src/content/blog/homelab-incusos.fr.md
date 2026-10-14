@@ -28,7 +28,7 @@ Avant de toucher à quoi que ce soit, j'ai inventorié l'existant en lecture seu
 - La « DMZ » n'en était pas une : un seul LAN plat, le firewall Proxmox désactivé, et seul un `ufw` dans la VM du reverse proxy filtrait l'entrée.
 - Toutes les VM avaient une **IPv6 publique** (SLAAC de la box), y compris le serveur Minecraft, sans aucun firewall.
 - Deux VM avaient **la même IP**. L'une était morte depuis 2023.
-- Le PrivateBin en production n'était **pas** celui décrit par le `docker-compose.yml` : un `docker run` lancé à la main pointait vers un autre dossier, vide. J'ai d'abord cru les données perdues ; elles étaient dans le dossier du compose. Leçon : **vérifier le contenu, pas seulement la configuration**.
+- Le PrivateBin en production n'était **pas** celui décrit par le `docker-compose.yml` : un `docker run` lancé à la main, monté sur un autre dossier… vide. Les vrais pastes étaient dans le dossier du compose. Mon premier inventaire avait conclu l'inverse ; c'est en relisant l'archive que l'erreur est apparue. Leçon : **vérifier le contenu, pas seulement la configuration**.
 - La sauvegarde Minecraft coupait le serveur chaque nuit pour zipper le monde… sur le même pool que l'original.
 
 ### Pourquoi IncusOS
@@ -48,15 +48,15 @@ IncusOS (SSD 240 Go)
 └── pool tank    4×4 To raidz1   médias, données perso, archives (~11,6 To utiles)
 
 Instances
-├── proxy       (conteneur, réseau dmz isolé)  Traefik, seul point d'entrée depuis Internet
-├── apps        (VM Debian)                    une quinzaine de stacks Docker
+├── proxy       (conteneur, réseau dmz isolé)  Traefik, point d'entrée HTTPS depuis Internet
+├── apps        (VM Debian)                    une douzaine de stacks Docker
 ├── media       (conteneur + GPU Arc)          Jellyfin, Radarr/Sonarr…
 ├── samba       (conteneur)                    partages SMB
 ├── minecraft   (conteneur)                    le serveur du moment
 └── monitoring  (conteneur)                    Prometheus, Loki, Grafana
 ```
 
-Traefik est le seul à être sur un réseau `dmz` isolé, avec des ACL Incus qui ne le laissent joindre que les ports nécessaires. Le reste n'est accessible que depuis le LAN.
+Traefik est le seul à être sur un réseau `dmz` isolé, avec des ACL Incus qui ne le laissent joindre que les ports nécessaires. Depuis Internet, seuls Traefik (HTTPS) et le serveur Minecraft sont joignables ; tout le reste ne l'est que depuis le LAN.
 
 ### Le dépôt : une seule source de vérité
 
@@ -109,7 +109,7 @@ C'est là que j'ai le plus appris. Les plus instructifs :
 
 **IncusOS n'embarque pas les firmwares GPU.** L'Arc A380 était « wedged », inutilisable : il manquait `i915/dg2_guc_70.bin`. L'application officielle `gpu-support` fournit linux-firmware ; une fois ajoutée au seed, une réinstallation l'inclut d'office. Résultat : transcodage d'une 4K HEVC en 1080p AV1 à **474 images par seconde**.
 
-**Un disque dur ne sait pas « oublier » rapidement.** Pour réutiliser les 4 disques de l'ancien TrueNAS, IncusOS exige qu'ils soient vierges. Son outil d'effacement envoie un *discard*, instantané sur un SSD. Sur un disque dur, le noyau se rabat sur l'écriture de zéros : **6 heures par disque**. J'ai voulu l'interrompre, mais cette écriture ne s'annule pas, et elle a bloqué l'arrêt du serveur. Il a fallu couper la prise connectée. Aucun dégât : les instances s'arrêtent avant les disques, et ZFS reste cohérent. Mais la bonne méthode était d'effacer seulement les signatures, c'est-à-dire le début et la fin de chaque disque, depuis un conteneur temporaire avec accès direct aux disques : quelques secondes.
+**Un disque dur ne sait pas « oublier » rapidement.** Pour réutiliser les 4 disques de l'ancien TrueNAS, IncusOS exige qu'ils soient vierges. Son outil d'effacement envoie un *discard*, instantané sur un SSD. Sur un disque dur, le noyau se rabat sur l'écriture de zéros : **environ 6 heures par disque** de 4 To. J'ai voulu l'interrompre, mais cette écriture ne s'annule pas, et elle a bloqué l'arrêt du serveur. Il a fallu couper la prise connectée. Aucun dégât : tout est revenu au redémarrage, et ZFS est resté cohérent. Mais la bonne méthode était d'effacer seulement les signatures, c'est-à-dire le début et la fin de chaque disque, depuis un conteneur temporaire avec accès direct aux disques : quelques secondes.
 
 **`prevent_destroy` m'a sauvé.** Pour déplacer les volumes de données vers le nouveau pool, j'ai copié les volumes puis réimporté les nouveaux dans le state OpenTofu. Avec le mauvais format d'ID d'import, le state retenait des attributs en trop, et le plan voulait **détruire et recréer** les trois volumes de données. Le verrou `prevent_destroy` a bloqué l'opération. Toujours le mettre sur les volumes qui contiennent des données.
 
@@ -132,12 +132,12 @@ Ce qui a changé :
 
 | | Avant | Après |
 |---|---|---|
-| Hôte | Proxmox 7.4, en fin de vie | IncusOS immuable, mis à jour tout seul |
+| Hôte | Proxmox 7.4, en fin de vie | IncusOS immuable, mises à jour téléchargées automatiquement |
 | Configuration | à la main, dispersée | un dépôt Git, `tofu plan` = « No changes » |
 | Stockage | TrueNAS virtualisé, non chiffré | ZFS natif chiffré, clés hors du serveur |
-| Réseau | LAN plat, IPv6 publique partout | un seul service exposé, sur un réseau isolé ; IPv6 coupée sur les instances |
-| Monitoring | aucun | métriques et logs de toutes les instances, automatiquement |
-| Secrets | dans des fichiers `.env` | SOPS + age, chiffrés dans Git |
+| Réseau | LAN plat, IPv6 publique partout | seuls Traefik (sur un réseau isolé) et Minecraft exposés ; IPv6 coupée sur les instances |
+| Monitoring | Uptime Kuma seulement | métriques et logs de toutes les instances, automatiquement |
+| Secrets | non versionnés, sur les VM | SOPS + age, chiffrés dans Git |
 
 Ce qui reste à faire, pour être honnête :
 
