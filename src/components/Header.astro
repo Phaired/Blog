@@ -3,10 +3,10 @@ import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
 import Theme from "./ThemeIcon.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, type UiType } from "../i18n/utils";
 
 interface Props {
-    lang: string;
+    lang: UiType;
     title?: string;
 }
 
@@ -29,21 +29,21 @@ function isActive(prefix: string) {
         <!-- Navigation links -->
         <nav class="nav-main" aria-label="Main navigation">
             <HeaderLink
-                href={`/${lang}/projects`}
+                href={`/${lang}/projects/`}
                 class:list={[isActive("/projects") ? "active" : ""]}
             >
                 {t("nav.projects")}
             </HeaderLink>
 
             <HeaderLink
-                href={`/${lang}/blog`}
+                href={`/${lang}/blog/`}
                 class:list={[isActive("/blog") ? "active" : ""]}
             >
                 {t("nav.blog")}
             </HeaderLink>
 
             <HeaderLink
-                href={`/${lang}/about`}
+                href={`/${lang}/about/`}
                 class:list={[isActive("/about") ? "active" : ""]}
             >
                 {t("nav.about")}

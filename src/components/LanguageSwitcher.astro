@@ -1,14 +1,14 @@
 ---
-import { getLocalizedPathname, LANGUAGES } from "../i18n/utils";
+import { getLocalizedPathname, LANGUAGES, type UiType } from "../i18n/utils";
 const flags = {
     en: "🇬🇧",
     fr: "🇫🇷",
 } as const;
 interface Props {
-    lang: string;
+    lang: UiType;
 }
 const { lang }: Props = Astro.props;
-const otherLangs = Object.keys(LANGUAGES).filter((l) => l !== lang);
+const otherLangs = (Object.keys(LANGUAGES) as UiType[]).filter((l) => l !== lang);
 ---
 
 <div class="lang-switcher">

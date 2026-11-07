@@ -3,21 +3,18 @@ import BaseHead from "../../components/BaseHead.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { ClientRouter } from "astro:transitions";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
-import { useTranslations } from "../../i18n/utils";
+import { getLangPaths, useTranslations, type UiType } from "../../i18n/utils";
 const age = () => {
     const birthdate = new Date("2001-03-25");
     return Math.floor(
-        (new Date() - birthdate) / (365.25 * 24 * 60 * 60 * 1000),
+        (Date.now() - birthdate.getTime()) / (365.25 * 24 * 60 * 60 * 1000),
     );
 };
 
-const lang = Astro.params.lang;
+const lang = Astro.params.lang as UiType;
 const t = useTranslations(lang);
 
-export function getStaticPaths() {
-    return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
-}
+export const getStaticPaths = getLangPaths;
 ---
 
 <!doctype html>
@@ -85,13 +82,13 @@ export function getStaticPaths() {
             </section>
             <section class="home-content">
                 <h3>{t("home.who.title")}</h3>
-                <p>{t("home.who.text", age)}</p>
+                <p>{t("home.who.text", age())}</p>
                 <h3>{t("home.why.title")}</h3>
                 <p>{t("home.why.text")}</p>
                 <h3>{t("home.share.title")}</h3>
                 <p>{t("home.share.text")}</p>
             </section>
         </main>
-        <Footer />
+        <Footer lang={lang} />
     </body>
 </html>

@@ -1,0 +1,141 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import ReadingTime from "../components/ReadingTime.astro";
+import { ClientRouter, fade } from "astro:transitions";
+import { Image } from "astro:assets";
+import { useTranslations, type UiType } from "../i18n/utils";
+import { entryUrl, getVisibleEntries, type Kind } from "../utils/content";
+
+interface Props {
+    kind: Kind;
+    lang: UiType;
+    width: string;
+}
+
+const { kind, lang, width } = Astro.props;
+const t = useTranslations(lang);
+const entries = await getVisibleEntries(kind, lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+    <head>
+        <ClientRouter />
+        <BaseHead title={t("site.title")} description={t("site.description")} />
+    </head>
+    <body>
+        <Header lang={lang} />
+        <main
+            style={`--list-width: ${width}`}
+            transition:animate={fade({ duration: "0.15s" })}
+        >
+            <section>
+                <ul>
+                    {
+                        entries.map((entry) => (
+                            <li>
+                                <a href={entryUrl(kind, entry)}>
+                                    <div class="img-wrap">
+                                        <Image
+                                            width={720}
+                                            height={360}
+                                            src={entry.data.heroImage ?? ""}
+                                            alt=""
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <h4 class="title">{entry.data.title}</h4>
+                                    <p class="date">
+                                        <FormattedDate
+                                            date={entry.data.pubDate}
+                                            lang={lang}
+                                        />{" "}
+                                        -{" "}
+                                        <ReadingTime
+                                            lang={lang}
+                                            body={entry.body ?? ""}
+                                        />
+                                    </p>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </section>
+        </main>
+        <Footer lang={lang} />
+    </body>
+</html>
+
+<style>
+    main {
+        width: var(--list-width);
+    }
+    ul {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem 2rem;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    ul li a {
+        display: block;
+        text-decoration: none;
+    }
+
+    /* — Image wrapper — */
+    .img-wrap {
+        overflow: hidden;
+        border-radius: var(--radius);
+        line-height: 0;
+    }
+    .img-wrap img {
+        width: 100%;
+        height: auto;
+        transition: transform 0.4s ease;
+    }
+    ul li a:hover .img-wrap img {
+        transform: scale(1.03);
+    }
+
+    /* — Text — */
+    .title {
+        margin: 0.75rem 0 0.25rem;
+        color: rgb(var(--color-text-title));
+        line-height: 1.3;
+        transition: color 0.2s ease;
+    }
+    .date {
+        margin: 0;
+        color: rgb(var(--color-date));
+        font-size: 0.8rem;
+        transition: color 0.2s ease;
+    }
+    ul li a:hover .title {
+        color: rgb(var(--accent));
+    }
+
+    /* — Featured (first) — */
+    ul li:first-child {
+        grid-column: 1 / -1;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(var(--accent), 0.1);
+    }
+    ul li:first-child .title {
+        font-size: 1.8rem;
+    }
+
+    @media (max-width: 720px) {
+        ul {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        ul li:first-child .title {
+            font-size: 1.4rem;
+        }
+    }
+</style>

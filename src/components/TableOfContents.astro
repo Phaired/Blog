@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, type UiType } from "../i18n/utils";
 
 interface Heading {
     depth: number;
@@ -9,7 +9,7 @@ interface Heading {
 
 interface Props {
     headings: Heading[];
-    lang: string;
+    lang: UiType;
 }
 
 const { headings, lang } = Astro.props;
