@@ -1,13 +1,11 @@
 ---
 import Layout from "../../layouts/Post.astro";
-import { useTranslations } from "../../i18n/utils";
+import { getLangPaths, useTranslations, type UiType } from "../../i18n/utils";
 
-const lang = Astro.params.lang;
+const lang = Astro.params.lang as UiType;
 const t = useTranslations(lang);
 
-export function getStaticPaths() {
-    return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
-}
+export const getStaticPaths = getLangPaths;
 
 const originalDate: Date = new Date(import.meta.env.BUILD_DATE);
 const formattedDate: string = originalDate.toLocaleString("fr-FR", {

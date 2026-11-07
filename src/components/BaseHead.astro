@@ -2,6 +2,8 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import "../styles/global.css";
+import { Font } from "astro:assets";
+import { getLocalizedPathname, LANGUAGES, type UiType } from "../i18n/utils";
 
 interface Props {
     title: string;
@@ -19,26 +21,31 @@ const { title, description, image = "/share-banner.webp" }: Props = Astro.props;
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads -->
-<link
-    rel="preload"
-    href="/fonts/Inter-Regular.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-/>
-<link
-    rel="preload"
-    href="/fonts/Inter-SemiBold.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-/>
+<Font cssVariable="--font-inter" preload={[{ weight: 400 }, { weight: 600 }]} />
+
+<!-- Applique le thème avant le premier rendu (évite le flash clair -> sombre) -->
+<script is:inline>
+    document.documentElement.classList.toggle(
+        "dark",
+        (localStorage.getItem("theme") ??
+            (matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light")) === "dark",
+    );
+</script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+    (Object.keys(LANGUAGES) as UiType[]).map((l) => (
+        <link
+            rel="alternate"
+            hreflang={l}
+            href={new URL(getLocalizedPathname(Astro.url.pathname, l), Astro.site)}
+        />
+    ))
+}
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>

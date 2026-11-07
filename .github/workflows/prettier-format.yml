@@ -7,22 +7,21 @@ jobs:
   prettify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
-          fetch-deps: 0
 
       - name: Install Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Run Prettier
         run: |
-          bun install --save-dev prettier prettier-plugin-astro
+          bun install --frozen-lockfile
           bunx prettier --write **/*.{js,md,astro,ts} --tab-width 4
 
-      - uses: EndBug/add-and-commit@v9
+      - uses: EndBug/add-and-commit@v11
         with:
           add: "src"
           author_name: Prettier

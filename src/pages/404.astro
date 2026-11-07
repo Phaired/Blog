@@ -1,0 +1,22 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { DEFAULT_LANG } from "../i18n/utils";
+---
+
+<!doctype html>
+<html lang={DEFAULT_LANG}>
+    <head>
+        <BaseHead title="404" description="Page not found / Page introuvable" />
+    </head>
+    <body>
+        <Header lang={DEFAULT_LANG} />
+        <main>
+            <h1>404</h1>
+            <p>Page not found. <a href="/en/">Back home</a></p>
+            <p>Page introuvable. <a href="/fr/">Retour à l'accueil</a></p>
+        </main>
+        <Footer lang={DEFAULT_LANG} />
+    </body>
+</html>

@@ -1,5 +1,4 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -7,7 +6,9 @@ import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { ClientRouter, fade } from "astro:transitions";
-import { useTranslations } from "../i18n/utils";
+import { useTranslations, type UiType } from "../i18n/utils";
+import "katex/dist/katex.min.css";
+import type { Entry } from "../utils/content";
 
 interface Heading {
     depth: number;
@@ -15,9 +16,8 @@ interface Heading {
     text: string;
 }
 
-type entry = "blog" | "projects";
-type Props = CollectionEntry<entry>["data"] & {
-    lang: string;
+type Props = Omit<Entry["data"], "lang" | "isVisible"> & {
+    lang: UiType;
     headings?: Heading[];
 };
 

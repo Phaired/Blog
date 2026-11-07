@@ -9,6 +9,9 @@ export const DEFAULT_LANG = "en";
 
 export type UiType = keyof typeof ui;
 
+export const getLangPaths = () =>
+    (Object.keys(LANGUAGES) as UiType[]).map((lang) => ({ params: { lang } }));
+
 export function getLangFromUrl(url: URL) {
     const [, lang] = url.pathname.split("/");
     if (lang in ui) return lang as UiType;
@@ -20,8 +23,8 @@ export function useTranslations(lang?: UiType) {
         key: keyof (typeof ui)[typeof DEFAULT_LANG],
         ...args: any[]
     ) {
-        let translation =
-            ui[lang ?? DEFAULT_LANG][key] || ui[DEFAULT_LANG][key];
+        const dict: Partial<Record<string, string>> = ui[lang ?? DEFAULT_LANG];
+        let translation: string = dict[key] || ui[DEFAULT_LANG][key];
         if (args.length > 0) {
             for (let i = 0; i < args.length; i++) {
                 translation = translation.replace(`{${i}}`, args[i]);
