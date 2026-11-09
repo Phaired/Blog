@@ -31,9 +31,11 @@ const current = Astro.url.pathname;
                     </a>
                 ))
             }
+        </nav>
+        <div class="tools">
             <ThemeToggle label={t("theme.toggle")} />
             <LanguageSwitcher lang={lang} />
-        </nav>
+        </div>
     </div>
 </header>
 
@@ -48,6 +50,10 @@ const current = Astro.url.pathname;
         border-bottom: 2px solid var(--rule);
     }
     .name {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        margin-right: auto;
         font-family: var(--font-head);
         font-weight: 800;
         font-size: 18px;
@@ -61,6 +67,11 @@ const current = Astro.url.pathname;
         font-size: 15px;
         font-weight: 500;
     }
+    .tools {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
     nav > a {
         padding: 10px 0;
         border-bottom: 2px solid transparent;
@@ -68,12 +79,15 @@ const current = Astro.url.pathname;
     nav > a[aria-current="page"] {
         border-bottom-color: var(--accent);
     }
-    @media (max-width: 560px) {
+    @media (max-width: 640px) {
         .bar {
-            justify-content: flex-start;
+            padding: 10px 0 0;
+            row-gap: 0;
         }
         nav {
-            gap: 4px 18px;
+            order: 1;
+            width: 100%;
+            gap: 0 20px;
         }
     }
 </style>

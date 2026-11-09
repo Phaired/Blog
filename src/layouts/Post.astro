@@ -116,8 +116,10 @@ const pad = (i: number) => String(i + 1).padStart(2, "0");
 
                 {
                     toc.length > 0 && (
-                        <nav class="toc" aria-label={t("toc.label")}>
-                            <p class="eyebrow">{t("toc.title")}</p>
+                        <>
+                        <details class="toc">
+                            <summary class="eyebrow">{t("toc.title")}</summary>
+                            <nav aria-label={t("toc.label")}>
                             <ol>
                                 {toc.map((h, i) => (
                                     <li>
@@ -128,7 +130,12 @@ const pad = (i: number) => String(i + 1).padStart(2, "0");
                                     </li>
                                 ))}
                             </ol>
-                        </nav>
+                            </nav>
+                        </details>
+                        <script is:inline>
+                            document.currentScript.previousElementSibling.open = matchMedia("(min-width: 900px)").matches;
+                        </script>
+                        </>
                     )
                 }
             </aside>
@@ -153,7 +160,10 @@ const pad = (i: number) => String(i + 1).padStart(2, "0");
 
 <script>
     // Surligne l'entrée du sommaire correspondant à la section lue
+    const desktop = matchMedia("(min-width: 900px)");
     function initToc() {
+        const details = document.querySelector<HTMLDetailsElement>("details.toc");
+        if (details) details.open = desktop.matches;
         const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
         if (!links.length) return;
         const byId = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
@@ -235,6 +245,65 @@ const pad = (i: number) => String(i + 1).padStart(2, "0");
     }
     .toc {
         padding-top: 24px;
+    }
+    .toc summary {
+        list-style: none;
+        cursor: pointer;
+    }
+    .toc summary::-webkit-details-marker {
+        display: none;
+    }
+    @media (min-width: 900px) {
+        .toc summary {
+            pointer-events: none;
+        }
+    }
+    @media (max-width: 899px) {
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--rule);
+        }
+        .meta div,
+        .meta div:last-child {
+            flex-direction: column;
+            gap: 2px;
+            padding: 0;
+            border: 0;
+        }
+        .meta dd {
+            text-align: left;
+        }
+        .toc {
+            padding: 0;
+            border-bottom: 1px solid var(--rule);
+        }
+        .toc summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 48px;
+        }
+        .toc summary::after {
+            content: "+";
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--fg);
+        }
+        .toc[open] summary::after {
+            content: "−";
+        }
+        .toc ol {
+            margin: 0 0 16px;
+        }
+        .body {
+            gap: 32px;
+        }
+        .lead {
+            font-size: 19px;
+        }
     }
     .toc ol {
         list-style: none;
