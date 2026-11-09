@@ -52,7 +52,7 @@ export const ui = {
         "about.master.title": "Master Informatique",
         "about.master.text": "I completed a master's degree in computer science to deepen my expertise in fields such as software development and artificial intelligence.",
         "about.server.title": "Server Information",
-        "about.server.text": "This website is hosted on <a href=\"https://pulseheberg.com\">pulseheberg</a>, and the last successful update date was at {0}.",
+        "about.server.text": "This website is hosted on <a href=\"https://www.netcup.com\">netcup</a>, and the last successful update date was at {0}.",
         "home.welcome": "Welcome to my website",
         "about.title": "About me",
         "about.description": "I'm a web developer and I love Astro!",
@@ -157,6 +157,6 @@ export const ui = {
         "about.master.title": "Master Informatique",
         "about.master.text": "J'ai terminé un master en informatique afin d'approfondir mon expertise dans des domaines comme le développement logiciel ou l'intelligence artificielle.",
         "about.server.title": "Informations serveur",
-        "about.server.text": "Ce site est hébergé sur <a href=\"https://pulseheberg.com\">pulseheberg</a> et la dernière mise à jour réussie date du {0}.",
+        "about.server.text": "Ce site est hébergé sur <a href=\"https://www.netcup.com\">netcup</a> et la dernière mise à jour réussie date du {0}.",
     },
 } as const;
