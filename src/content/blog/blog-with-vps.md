@@ -6,6 +6,7 @@ updatedDate: "April 2 2024"
 heroImage: "/blog/blog-with-vps/blog-with-vps-hero.webp"
 slug: "blog-with-vps-en"
 lang: "en"
+tags: ["Web", "VPS", "Astro", "GitHub Actions"]
 isVisible: true
 ---
 

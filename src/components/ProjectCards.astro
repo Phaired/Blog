@@ -1,0 +1,76 @@
+---
+import { Image } from "astro:assets";
+import { entryUrl, type Entry } from "../utils/content";
+
+interface Props {
+    entries: Entry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ul class="cards">
+    {
+        entries.map((entry) => (
+            <li>
+                <a href={entryUrl("projects", entry)}>
+                    {entry.data.heroImage && (
+                        <Image src={entry.data.heroImage} alt="" width={800} height={600} loading="lazy" />
+                    )}
+                    <span class="caption">
+                        <span class="title">{entry.data.title}</span>
+                        <span class="meta">
+                            {entry.data.tags[0]} · {entry.data.pubDate.getFullYear()}
+                        </span>
+                    </span>
+                </a>
+            </li>
+        ))
+    }
+</ul>
+
+<style>
+    .cards {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 40px 32px;
+    }
+    a {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    a :global(img) {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        filter: grayscale(1);
+        transition: filter 0.3s ease;
+    }
+    a:hover :global(img) {
+        filter: none;
+    }
+    .caption {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--rule);
+    }
+    .title {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+    }
+    .meta {
+        font-size: 14px;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+</style>

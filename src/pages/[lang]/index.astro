@@ -1,94 +1,101 @@
 ---
-import BaseHead from "../../components/BaseHead.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-import { ClientRouter } from "astro:transitions";
+import Page from "../../layouts/Page.astro";
+import EntryRows from "../../components/EntryRows.astro";
+import ProjectCards from "../../components/ProjectCards.astro";
 import { getLangPaths, useTranslations, type UiType } from "../../i18n/utils";
-const age = () => {
-    const birthdate = new Date("2001-03-25");
-    return Math.floor(
-        (Date.now() - birthdate.getTime()) / (365.25 * 24 * 60 * 60 * 1000),
-    );
-};
+import { getVisibleEntries } from "../../utils/content";
+
+export const getStaticPaths = getLangPaths;
 
 const lang = Astro.params.lang as UiType;
 const t = useTranslations(lang);
-
-export const getStaticPaths = getLangPaths;
+const posts = await getVisibleEntries("blog", lang);
+const projects = await getVisibleEntries("projects", lang);
+const meta = [
+    [t("home.meta.job.label"), t("home.meta.job")],
+    [t("home.meta.city.label"), t("home.meta.city")],
+    [t("home.meta.edu.label"), t("home.meta.edu")],
+];
 ---
 
-<!doctype html>
-<html lang={lang}>
-    <head>
-        <ClientRouter />
-        <BaseHead title={t("site.title")} description={t("site.description")} />
-        <style>
-            .hero {
-                text-align: center;
-                padding: 4rem 1rem 3rem;
-                position: relative;
+<Page lang={lang} title={t("site.title")} description={t("site.description")}>
+    <section class="wrap hero">
+        <h1 class="display">{t("home.hero")}<span class="dot">.</span></h1>
+        <dl class="facts">
+            {
+                meta.map(([label, value]) => (
+                    <div>
+                        <dt class="eyebrow">{label}</dt>
+                        <dd>{value}</dd>
+                    </div>
+                ))
             }
-            .hero::before {
-                content: "";
-                position: absolute;
-                top: -40%;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 600px;
-                height: 600px;
-                background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 70%);
-                pointer-events: none;
-                z-index: -1;
-            }
-            .hero-greeting {
-                font-size: 1rem;
-                font-weight: 500;
-                color: rgb(var(--accent));
-                text-transform: uppercase;
-                letter-spacing: 0.1em;
-                margin-bottom: 0.5rem;
-            }
-            .hero-title {
-                font-size: clamp(2.5rem, 6vw, 4rem);
-                margin-bottom: 1rem;
-                line-height: 1.1;
-            }
-            .hero-subtitle {
-                font-size: 1.1rem;
-                color: rgb(var(--color-date));
-                max-width: 600px;
-                margin: 0 auto;
-                line-height: 1.6;
-            }
-            .home-content {
-                padding: 1rem 0 2rem;
-            }
-            .home-content h3 {
-                margin-top: 1.5rem;
-            }
-            @media (max-width: 768px) {
-                .hero {
-                    padding: 2.5rem 1rem 2rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <Header lang={lang} title={t("site.title")} />
-        <main>
-            <section class="hero">
-                <h1 class="hero-title gradient-text">{t("site.title")}</h1>
-                <p class="hero-subtitle">{t("home.intro")}</p>
-            </section>
-            <section class="home-content">
-                <h3>{t("home.who.title")}</h3>
-                <p>{t("home.who.text", age())}</p>
-                <h3>{t("home.why.title")}</h3>
-                <p>{t("home.why.text")}</p>
-                <h3>{t("home.share.title")}</h3>
-                <p>{t("home.share.text")}</p>
-            </section>
-        </main>
-        <Footer lang={lang} />
-    </body>
-</html>
+            <p class="lead">{t("home.lead")}</p>
+        </dl>
+    </section>
+
+    <section class="wrap block" aria-labelledby="writing">
+        <div class="head">
+            <h2 id="writing">{t("nav.writing")}</h2>
+            <a href={`/${lang}/blog/`} class="link-rule">{t("list.allPosts")} →</a>
+        </div>
+        <EntryRows kind="blog" entries={posts} />
+    </section>
+
+    <section class="wrap block" aria-labelledby="projects">
+        <div class="head">
+            <h2 id="projects">{t("nav.projects")}</h2>
+            <a href={`/${lang}/projects/`} class="link-rule">{t("list.allProjects")} →</a>
+        </div>
+        <ProjectCards entries={projects} />
+    </section>
+</Page>
+
+<style>
+    .hero {
+        padding-top: clamp(56px, 9vw, 96px);
+        padding-bottom: 72px;
+    }
+    .hero h1 {
+        font-size: clamp(56px, 10vw, 120px);
+        max-width: 11ch;
+    }
+    .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px 48px;
+        margin: 48px 0 0;
+        font-size: 15px;
+    }
+    .facts > * {
+        flex: 1 1 200px;
+        margin: 0;
+        padding-top: 12px;
+        border-top: 1px solid var(--rule);
+    }
+    .facts dd {
+        margin: 4px 0 0;
+    }
+    .facts .lead {
+        flex: 2 1 320px;
+        font-size: 17px;
+    }
+    .block {
+        padding-top: 64px;
+        padding-bottom: 32px;
+    }
+    .block:last-child {
+        padding-bottom: 96px;
+    }
+    .head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    .head h2 {
+        font-size: 40px;
+    }
+</style>

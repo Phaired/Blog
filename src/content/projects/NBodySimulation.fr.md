@@ -7,6 +7,7 @@ heroImage: "/projects/nbody/nbody-hero.png"
 heroGif: "/projects/nbody/nbody-gif.gif"
 slug: "NBodySimulation-fr"
 lang: "fr"
+tags: ["C++", "MPI"]
 isVisible: true
 ---
 

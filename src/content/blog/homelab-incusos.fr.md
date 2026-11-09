@@ -5,6 +5,7 @@ pubDate: "Oct 15 2026"
 heroImage: "/blog/homelab-incusos/homelab-incusos-hero.webp"
 slug: "homelab-incusos-fr"
 lang: "fr"
+tags: ["Homelab", "IncusOS", "ZFS", "OpenTofu"]
 isVisible: false
 ---
 

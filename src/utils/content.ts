@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import wordCount from "word-count";
 import type { UiType } from "../i18n/utils";
 
 export type Kind = "blog" | "projects";
@@ -16,3 +17,6 @@ export async function getVisibleEntries(kind: Kind, lang: UiType) {
         .filter((e) => e.data.isVisible && e.data.lang === lang)
         .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
+
+export const readingMinutes = (body = "") =>
+    Math.max(1, Math.ceil(wordCount(body) / 200));

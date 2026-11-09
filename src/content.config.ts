@@ -12,6 +12,7 @@ const schema = z.object({
     slug: z.string().optional(),
     lang: z.enum(["en", "fr"]),
     isVisible: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
 });
 
 // L'id vient du `slug` du frontmatter (ex: "blog-with-vps-en").

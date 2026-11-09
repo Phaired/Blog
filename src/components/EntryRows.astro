@@ -1,0 +1,81 @@
+---
+import { entryUrl, type Entry, type Kind } from "../utils/content";
+
+interface Props {
+    kind: Kind;
+    entries: Entry[];
+}
+
+const { kind, entries } = Astro.props;
+---
+
+<ol class="rows">
+    {
+        entries.map((entry, i) => (
+            <li>
+                <a href={entryUrl(kind, entry)}>
+                    <span class="num">{String(i + 1).padStart(2, "0")}</span>
+                    <span class="title">{entry.data.title}</span>
+                    <span class="meta">{entry.data.tags[0]}</span>
+                    <span class="meta year">{entry.data.pubDate.getFullYear()}</span>
+                </a>
+            </li>
+        ))
+    }
+</ol>
+
+<style>
+    .rows {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid var(--rule);
+    }
+    a {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px 32px;
+        padding: 28px 0;
+        border-top: 1px solid var(--rule);
+    }
+    .num {
+        width: 40px;
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--accent);
+    }
+    .title {
+        flex: 1 1 420px;
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: clamp(26px, 3.2vw, 38px);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        transition: transform 0.2s ease;
+    }
+    a:hover .title {
+        transform: translateX(6px);
+    }
+    .meta {
+        width: 140px;
+        font-size: 14px;
+        color: var(--muted);
+    }
+    .year {
+        width: 48px;
+        text-align: right;
+    }
+    @media (max-width: 720px) {
+        .num {
+            width: 100%;
+        }
+        .meta {
+            width: auto;
+        }
+        .year::before {
+            content: "· ";
+        }
+    }
+</style>

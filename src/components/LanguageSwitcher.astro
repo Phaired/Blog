@@ -1,31 +1,50 @@
 ---
 import { getLocalizedPathname, LANGUAGES, type UiType } from "../i18n/utils";
-const flags = {
-    en: "🇬🇧",
-    fr: "🇫🇷",
-} as const;
+
 interface Props {
     lang: UiType;
 }
-const { lang }: Props = Astro.props;
-const otherLangs = (Object.keys(LANGUAGES) as UiType[]).filter((l) => l !== lang);
+
+const { lang } = Astro.props;
+const langs = Object.keys(LANGUAGES) as UiType[];
 ---
 
-<div class="lang-switcher">
+<span class="switch">
     {
-        otherLangs.map((l) => (
-            <a href={getLocalizedPathname(Astro.url.pathname, l)}>{flags[l]}</a>
+        langs.map((l, i) => (
+            <>
+                {i > 0 && <span aria-hidden="true">/</span>}
+                {l === lang ? (
+                    <span class="current" aria-current="true">{l.toUpperCase()}</span>
+                ) : (
+                    <a
+                        href={getLocalizedPathname(Astro.url.pathname, l)}
+                        hreflang={l}
+                        lang={l}
+                        aria-label={LANGUAGES[l]}
+                    >
+                        {l.toUpperCase()}
+                    </a>
+                )}
+            </>
         ))
     }
-</div>
+</span>
+
 <style>
-    .lang-switcher {
-        display: flex;
-        gap: 0.5em;
-        margin-left: 0.5em;
+    .switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: var(--muted);
     }
-    .lang-switcher a {
-        text-decoration: none;
-        font-size: 0.8em;
+    .switch a {
+        padding: 10px 2px;
+    }
+    .current {
+        color: var(--fg);
+        font-weight: 700;
+        border-bottom: 2px solid var(--accent);
     }
 </style>

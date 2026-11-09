@@ -1,10 +1,29 @@
 ---
-import EntryList from "../../../layouts/EntryList.astro";
-import { getLangPaths, type UiType } from "../../../i18n/utils";
+import Page from "../../../layouts/Page.astro";
+import EntryRows from "../../../components/EntryRows.astro";
+import { getLangPaths, useTranslations, type UiType } from "../../../i18n/utils";
+import { getVisibleEntries } from "../../../utils/content";
 
 export const getStaticPaths = getLangPaths;
 
 const lang = Astro.params.lang as UiType;
+const t = useTranslations(lang);
+const entries = await getVisibleEntries("blog", lang);
 ---
 
-<EntryList kind="blog" lang={lang} width="960px" />
+<Page lang={lang} title={`${t("nav.writing")} · ${t("site.title")}`} description={t("site.description")}>
+    <div class="wrap">
+        <h1 class="display">{t("nav.writing")}<span class="dot">.</span></h1>
+        {entries.length ? <EntryRows kind="blog" entries={entries} /> : <p>{t("list.empty")}</p>}
+    </div>
+</Page>
+
+<style>
+    h1 {
+        font-size: clamp(56px, 9vw, 104px);
+        padding: clamp(48px, 8vw, 88px) 0 48px;
+    }
+    .wrap {
+        padding-bottom: 96px;
+    }
+</style>

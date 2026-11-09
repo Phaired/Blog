@@ -7,6 +7,7 @@ heroImage: "/projects/steganography/steganography-hero.png"
 heroGif: ""
 slug: "Steganography-en"
 lang: "en"
+tags: ["OCaml", "RSA"]
 isVisible: true
 ---
 

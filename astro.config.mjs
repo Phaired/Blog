@@ -32,6 +32,19 @@ export default defineConfig({
                 ],
             },
         },
+        {
+            provider: fontProviders.local(),
+            name: "Inter Tight",
+            cssVariable: "--font-display",
+            fallbacks: ["Arial", "sans-serif"],
+            options: {
+                variants: [700, 800].map((weight) => ({
+                    weight,
+                    style: "normal",
+                    src: [`@fontsource/inter-tight/files/inter-tight-latin-${weight}-normal.woff2`],
+                })),
+            },
+        },
     ],
     markdown: {
         processor: satteri({

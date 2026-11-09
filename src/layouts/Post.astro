@@ -1,14 +1,14 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import Page from "./Page.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import HeroImage from "../components/HeroImage.astro";
-import TableOfContents from "../components/TableOfContents.astro";
-import { ClientRouter, fade } from "astro:transitions";
-import { useTranslations, type UiType } from "../i18n/utils";
+import {
+    getLocalizedPathname,
+    LANGUAGES,
+    useTranslations,
+    type UiType,
+} from "../i18n/utils";
 import "katex/dist/katex.min.css";
-import type { Entry } from "../utils/content";
 
 interface Heading {
     depth: number;
@@ -16,100 +16,279 @@ interface Heading {
     text: string;
 }
 
-type Props = Omit<Entry["data"], "lang" | "isVisible"> & {
+interface Props {
     lang: UiType;
+    title: string;
+    description: string;
+    pubDate?: Date;
+    updatedDate?: Date;
+    heroImage?: string;
+    heroGif?: string;
+    tags?: string[];
     headings?: Heading[];
-};
+    kicker?: string;
+    readingTime?: number;
+    next?: { title: string; url: string };
+}
 
 const {
+    lang,
     title,
     description,
     pubDate,
     updatedDate,
     heroImage,
     heroGif,
-    lang,
+    tags = [],
     headings = [],
-}: Props = Astro.props;
+    kicker,
+    readingTime,
+    next,
+} = Astro.props;
 const t = useTranslations(lang);
+
+// Sommaire : le niveau de titre le moins profond qui en a au moins deux
+const tocDepth = [2, 3, 4].find((d) => headings.filter((h) => h.depth === d).length > 1);
+const toc = headings.filter((h) => h.depth === tocDepth);
+// Pas de numéros automatiques si les titres sont déjà numérotés à la main
+const numbered = toc.length > 0 && !toc.some((h) => /^\d/.test(h.text)) ? `h${tocDepth}` : undefined;
+const otherLangs = (Object.keys(LANGUAGES) as UiType[]).filter((l) => l !== lang);
+const pad = (i: number) => String(i + 1).padStart(2, "0");
 ---
 
-<html lang={lang}>
-    <head>
-        <ClientRouter />
-        <BaseHead
-            title={title}
-            description={description}
-            image={heroGif ? heroGif : heroImage}
-        />
-        <style>
-            main {
-                width: calc(100% - 2em);
-                max-width: 100%;
-                margin: 0;
-                color: var(--color-text);
-            }
-            .prose {
-                width: 720px;
-                max-width: calc(100% - 2em);
-                margin: auto;
-                padding: 1em;
-            }
-            .title {
-                margin-bottom: 1em;
-                padding: 1.5em 0;
-                text-align: center;
-                line-height: 1;
-            }
+<Page lang={lang} title={title} description={description} image={heroGif || heroImage}>
+    <div class="wrap">
+        <header class="intro">
+            {kicker && <p class="eyebrow kicker">{kicker}</p>}
+            <h1 class="display">{title}</h1>
+        </header>
 
-            .title h1 {
-                margin: 0 0 0.75em 0;
-            }
-            .title hr {
-                border: none;
-                height: 1px;
-                background: linear-gradient(90deg, transparent, rgba(var(--accent), 0.5), transparent);
-            }
-            .date {
-                margin-bottom: 0.5em;
-                color: rgb(var(--color-date));
-                font-size: 0.9rem;
-                font-weight: 500;
-            }
-            .last-updated-on {
-                font-style: italic;
-            }
-        </style>
-    </head>
-    <body>
-        <Header lang={lang} />
-        <TableOfContents headings={headings} lang={lang} />
-        <main>
+        <HeroImage heroImage={heroImage} heroGif={heroGif} />
+
+        <div class="body">
+            <aside>
+                <dl class="meta">
+                    {
+                        pubDate && (
+                            <div>
+                                <dt>{t("post.published")}</dt>
+                                <dd><FormattedDate date={pubDate} lang={lang} /></dd>
+                            </div>
+                        )
+                    }
+                    {
+                        updatedDate && (
+                            <div>
+                                <dt>{t("post.updated")}</dt>
+                                <dd><FormattedDate date={updatedDate} lang={lang} /></dd>
+                            </div>
+                        )
+                    }
+                    {
+                        readingTime && (
+                            <div>
+                                <dt>{t("post.reading")}</dt>
+                                <dd>{t("post.minutes", readingTime)}</dd>
+                            </div>
+                        )
+                    }
+                    {
+                        tags.length > 0 && (
+                            <div>
+                                <dt>{t("post.topics")}</dt>
+                                <dd>{tags.join(", ")}</dd>
+                            </div>
+                        )
+                    }
+                    {
+                        otherLangs.map((l) => (
+                            <div>
+                                <dt>{t("post.alsoIn")}</dt>
+                                <dd>
+                                    <a href={getLocalizedPathname(Astro.url.pathname, l)} hreflang={l} lang={l} class="link-rule">
+                                        {LANGUAGES[l]}
+                                    </a>
+                                </dd>
+                            </div>
+                        ))
+                    }
+                </dl>
+
+                {
+                    toc.length > 0 && (
+                        <nav class="toc" aria-label={t("toc.label")}>
+                            <p class="eyebrow">{t("toc.title")}</p>
+                            <ol>
+                                {toc.map((h, i) => (
+                                    <li>
+                                        <a href={`#${h.slug}`}>
+                                            {numbered && <span class="n">{pad(i)}</span>}
+                                            {h.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ol>
+                        </nav>
+                    )
+                }
+            </aside>
+
             <article>
-                <HeroImage heroImage={heroImage} heroGif={heroGif} />
-                <div class="prose" transition:animate={fade({ duration: '0.15s' })}>
-                    <div class="title">
-                        <div class="date">
-                            <FormattedDate date={pubDate} lang={lang} />
-                            {
-                                updatedDate && (
-                                    <div class="last-updated-on">
-                                        {t("post.lastUpdated")}{" "}
-                                        <FormattedDate
-                                            date={updatedDate}
-                                            lang={lang}
-                                        />
-                                    </div>
-                                )
-                            }
-                        </div>
-                        <h1>{title}</h1>
-                        <hr />
-                    </div>
+                {pubDate && <p class="lead">{description}</p>}
+                <div class="prose" data-numbered={numbered}>
                     <slot />
                 </div>
+                {
+                    next && (
+                        <a href={next.url} class="next">
+                            <span class="eyebrow">{t("post.next")}</span>
+                            <span class="next-title">{next.title} →</span>
+                        </a>
+                    )
+                }
             </article>
-        </main>
-        <Footer lang={lang} />
-    </body>
-</html>
+        </div>
+    </div>
+</Page>
+
+<script>
+    // Surligne l'entrée du sommaire correspondant à la section lue
+    function initToc() {
+        const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+        if (!links.length) return;
+        const byId = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+        const targets = [...byId.keys()]
+            .map((id) => document.getElementById(id))
+            .filter((el): el is HTMLElement => !!el);
+        const observer = new IntersectionObserver(
+            () => {
+                const current = targets.filter((el) => el.getBoundingClientRect().top < 140).pop();
+                links.forEach((a) => a.removeAttribute("aria-current"));
+                if (current) byId.get(current.id)?.setAttribute("aria-current", "true");
+            },
+            { rootMargin: "0px 0px -60% 0px", threshold: [0, 1] },
+        );
+        targets.forEach((el) => observer.observe(el));
+        document.addEventListener("astro:before-swap", () => observer.disconnect(), { once: true });
+    }
+    document.addEventListener("astro:page-load", initToc);
+</script>
+
+<style>
+    .intro {
+        padding: clamp(48px, 8vw, 72px) 0 40px;
+    }
+    .kicker {
+        color: var(--accent);
+        margin-bottom: 24px;
+    }
+    .intro h1 {
+        max-width: 1040px;
+        font-size: clamp(40px, 6.4vw, 84px);
+        line-height: 0.98;
+    }
+    .body {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 48px 64px;
+        margin-top: 32px;
+        padding: 40px 0 96px;
+        border-top: 2px solid var(--rule);
+    }
+    aside {
+        flex: 1 1 240px;
+        max-width: 300px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    @media (min-width: 900px) {
+        aside {
+            position: sticky;
+            top: 24px;
+        }
+    }
+    @media (max-width: 899px) {
+        aside {
+            max-width: none;
+        }
+    }
+    .meta {
+        margin: 0;
+    }
+    .meta div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--rule-soft);
+    }
+    .meta div:last-child {
+        border-bottom-color: var(--rule);
+    }
+    .meta dt {
+        color: var(--muted);
+    }
+    .meta dd {
+        margin: 0;
+        text-align: right;
+    }
+    .toc {
+        padding-top: 24px;
+    }
+    .toc ol {
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .toc a {
+        display: flex;
+        gap: 12px;
+        padding: 5px 0;
+        color: var(--muted);
+    }
+    .toc a:hover,
+    .toc a[aria-current] {
+        color: var(--fg);
+    }
+    .toc a[aria-current] {
+        font-weight: 600;
+    }
+    .n {
+        flex: none;
+        width: 22px;
+    }
+    .toc a[aria-current] .n {
+        color: var(--accent);
+    }
+    article {
+        flex: 999 1 560px;
+        min-width: 0;
+        max-width: 720px;
+    }
+    .lead {
+        margin: 0 0 2em;
+        font-size: 22px;
+        line-height: 1.5;
+        font-weight: 500;
+    }
+    .next {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 72px;
+        padding: 28px 0;
+        border-top: 2px solid var(--rule);
+        border-bottom: 2px solid var(--rule);
+    }
+    .next-title {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: clamp(24px, 3vw, 30px);
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+    }
+</style>

@@ -1,107 +1,50 @@
 ---
 import { Image } from "astro:assets";
 
+interface Props {
+    heroImage?: string;
+    heroGif?: string;
+}
+
 const { heroImage, heroGif } = Astro.props;
 ---
 
-<style>
-    .hero-image-container {
-        position: relative;
-        width: 1020px;
-        max-width: 100%;
-        margin: 0 auto;
-        overflow: hidden;
-        border-radius: var(--radius);
-        box-shadow: var(--box-shadow);
-        background-color: rgb(var(--bg-color-accent));
-    }
-
-    .hero-image-container::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        background: linear-gradient(to top, rgb(var(--bg-color)), transparent);
-        pointer-events: none;
-    }
-
-    .hero-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        will-change: transform;
-        transform: translateZ(0);
-    }
-
-    .hero-gif {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-        pointer-events: none;
-    }
-
-    .hero-gif.visible {
-        opacity: 1;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .hero-gif {
-            display: none;
-        }
-    }
-</style>
-
 {
     heroImage && (
-        <div class="hero-image-container">
-            <Image
-                class="hero-image"
-                src={heroImage}
-                alt="Hero Image"
-                loading="lazy"
-                width="1020"
-                height="1020"
-            />
-
+        <div class="hero">
+            <Image src={heroImage} alt="" width={1400} height={600} loading="eager" fetchpriority="high" />
             {heroGif && (
-                <Image
-                    class="hero-image hero-gif"
-                    src={heroGif}
-                    alt="Animated Hero Image"
-                    loading="lazy"
-                    onload="this.classList.add('visible');"
-                    width="1020"
-                    height="1020"
-                />
+                <Image class="gif" src={heroGif} alt="" width={1400} height={600} onload="this.classList.add('visible')" />
             )}
         </div>
     )
 }
 
-<script>
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    const gifImage = entry.target.querySelector(".hero-gif");
-                    if (gifImage && !gifImage.classList.contains("visible")) {
-                        gifImage.classList.add("visible");
-                    }
-                    observer.unobserve(entry.target);
-                }
-            });
-        },
-        {
-            rootMargin: "50px 0px",
-            threshold: 0.1,
-        },
-    );
-
-    document.querySelectorAll(".hero-image-container").forEach((container) => {
-        observer.observe(container);
-    });
-</script>
+<style>
+    .hero {
+        position: relative;
+        overflow: hidden;
+        background: var(--code-bg);
+    }
+    .hero :global(img) {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 7 / 3;
+        max-height: 460px;
+        object-fit: cover;
+    }
+    .hero :global(.gif) {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+    .hero :global(.gif.visible) {
+        opacity: 1;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .hero :global(.gif) {
+            display: none;
+        }
+    }
+</style>

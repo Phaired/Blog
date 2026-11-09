@@ -1,7 +1,14 @@
 ---
 import { getCollection, render } from "astro:content";
 import Post from "../../../layouts/Post.astro";
-import { entrySlug, type Entry } from "../../../utils/content";
+import { useTranslations } from "../../../i18n/utils";
+import {
+    entrySlug,
+    entryUrl,
+    getVisibleEntries,
+    readingMinutes,
+    type Entry,
+} from "../../../utils/content";
 
 export async function getStaticPaths() {
     return (await getCollection("projects")).map((entry) => ({
@@ -11,9 +18,27 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props as { entry: Entry };
+const { lang } = entry.data;
+const t = useTranslations(lang);
 const { Content, headings } = await render(entry);
+
+// Suivant = l'entrée publiée d'après dans la liste (on reboucle au début)
+const list = await getVisibleEntries("projects", lang);
+const others = list.filter((e) => e.id !== entry.id);
+const idx = list.findIndex((e) => e.id === entry.id);
+const nextEntry = idx >= 0 ? list[(idx + 1) % list.length] : others[0];
+const next =
+    nextEntry && nextEntry.id !== entry.id
+        ? { title: nextEntry.data.title, url: entryUrl("projects", nextEntry) }
+        : undefined;
 ---
 
-<Post {...entry.data} headings={headings}>
+<Post
+    {...entry.data}
+    headings={headings}
+    kicker={entry.data.tags[0] ?? t("nav.projects")}
+    readingTime={readingMinutes(entry.body)}
+    next={next}
+>
     <Content />
 </Post>

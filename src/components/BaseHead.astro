@@ -23,6 +23,7 @@ const { title, description, image = "/share-banner.webp" }: Props = Astro.props;
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <Font cssVariable="--font-inter" preload={[{ weight: 400 }, { weight: 600 }]} />
+<Font cssVariable="--font-display" preload={[{ weight: 800 }]} />
 
 <!-- Applique le thème avant le premier rendu (évite le flash clair -> sombre) -->
 <script is:inline>

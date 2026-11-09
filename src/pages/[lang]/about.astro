@@ -21,21 +21,19 @@ const formattedDate: string = originalDate.toLocaleString("fr-FR", {
     lang={lang}
     title={t("about.title")}
     description={t("about.description")}
-    pubDate={new Date("September 25 2023")}
-    heroImage=""
 >
-    <h4>{t("about.academic.title")}</h4>
+    <h2>{t("about.academic.title")}</h2>
     <p set:html={t("about.academic.text")} />
 
-    <h5>{t("about.bts.title")}</h5>
+    <h3>{t("about.bts.title")}</h3>
     <p set:html={t("about.bts.text")} />
 
-    <h5>{t("about.lp.title")}</h5>
+    <h3>{t("about.lp.title")}</h3>
     <p set:html={t("about.lp.text")} />
 
-    <h5>{t("about.master.title")}</h5>
+    <h3>{t("about.master.title")}</h3>
     <p set:html={t("about.master.text")} />
 
-    <h4>{t("about.server.title")}</h4>
+    <h2>{t("about.server.title")}</h2>
     <p set:html={t("about.server.text", formattedDate)} />
 </Layout>

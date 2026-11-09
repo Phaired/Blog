@@ -1,0 +1,31 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { ClientRouter, fade } from "astro:transitions";
+import type { UiType } from "../i18n/utils";
+
+interface Props {
+    lang: UiType;
+    title: string;
+    description: string;
+    image?: string;
+}
+
+const { lang, title, description, image } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+    <head>
+        <ClientRouter />
+        <BaseHead title={title} description={description} image={image} />
+    </head>
+    <body>
+        <Header lang={lang} />
+        <main transition:animate={fade({ duration: "0.15s" })}>
+            <slot />
+        </main>
+        <Footer lang={lang} />
+    </body>
+</html>

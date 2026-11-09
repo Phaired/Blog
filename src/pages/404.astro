@@ -1,22 +1,37 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { DEFAULT_LANG } from "../i18n/utils";
+import Page from "../layouts/Page.astro";
+import { DEFAULT_LANG, LANGUAGES, useTranslations, type UiType } from "../i18n/utils";
+
+const langs = Object.keys(LANGUAGES) as UiType[];
+const t = useTranslations(DEFAULT_LANG);
 ---
 
-<!doctype html>
-<html lang={DEFAULT_LANG}>
-    <head>
-        <BaseHead title="404" description="Page not found / Page introuvable" />
-    </head>
-    <body>
-        <Header lang={DEFAULT_LANG} />
-        <main>
-            <h1>404</h1>
-            <p>Page not found. <a href="/en/">Back home</a></p>
-            <p>Page introuvable. <a href="/fr/">Retour à l'accueil</a></p>
-        </main>
-        <Footer lang={DEFAULT_LANG} />
-    </body>
-</html>
+<Page lang={DEFAULT_LANG} title={`404 · ${t("notFound.title")}`} description={t("notFound.text")}>
+    <div class="wrap">
+        <h1 class="display">404<span class="dot">.</span></h1>
+        {
+            langs.map((l) => {
+                const tl = useTranslations(l);
+                return (
+                    <p lang={l}>
+                        {tl("notFound.text")}{" "}
+                        <a href={`/${l}/`} class="link-rule">{tl("notFound.back")} →</a>
+                    </p>
+                );
+            })
+        }
+    </div>
+</Page>
+
+<style>
+    h1 {
+        font-size: clamp(80px, 16vw, 200px);
+        padding: 72px 0 32px;
+    }
+    p {
+        font-size: 18px;
+    }
+    .wrap {
+        padding-bottom: 96px;
+    }
+</style>
